@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="237484c2-557a-4fee-970c-ea4088a99d9e" name="Changes" comment="Added items" />
+    <list default="true" id="237484c2-557a-4fee-970c-ea4088a99d9e" name="Changes" comment="Added Images">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/harrypottermaze/ribbon 2.png" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -73,6 +76,7 @@
       <workItem from="1696319971952" duration="13672000" />
       <workItem from="1696837605689" duration="24272000" />
       <workItem from="1696923106334" duration="13639000" />
+      <workItem from="1696944650458" duration="558000" />
     </task>
     <task id="LOCAL-00001" summary="Added the maze with character movement and items">
       <option name="closed" value="true" />
@@ -96,10 +100,22 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Added the maze with character movement and items" />
     <MESSAGE value="Added items" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added items" />
+    <MESSAGE value="Added Images" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added Images" />
   </component>
 </project>
