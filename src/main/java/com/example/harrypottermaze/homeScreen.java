@@ -73,9 +73,9 @@ public class homeScreen extends Application {
         Text line3 = new Text("to open the game");
 
         // Apply styling to the Text nodes
-        line1.setFont(Font.font("Arial", FontWeight.BOLD, 24));
-        line2.setFont(Font.font("Arial", FontWeight.BOLD, 24));
-        line3.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+        line1.setFont(Font.font("Zapfino", FontWeight.BOLD, 24));
+        line2.setFont(Font.font("Zapfino", FontWeight.BOLD, 24));
+        line3.setFont(Font.font("Zapfino", FontWeight.BOLD, 24));
 
         // Apply glow effect to the Text nodes
         final Effect glow = new Glow(1.0);
