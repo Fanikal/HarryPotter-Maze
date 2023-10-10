@@ -51,17 +51,17 @@ public class newMaze extends Application {
     private int remainingSeconds;
 
 
-    Image lifeHeart = new Image("file:////Users/stella/Desktop/heart.png");
-    Image wand = new Image("file:////Users/stella/Desktop/wand.png");
-    Image potion = new Image("file:////Users/stella/Desktop/potion.png");
-    Image timeTurner = new Image("file:////Users/stella/Desktop/timeTurner.png");
-    Image ribbonItems = new Image("file:////Users/stella/Desktop/ribbonItems.png");
-    Image ribbonLife = new Image("file:////Users/stella/Desktop/ribbonLife.png");
-    Image help = new Image("file:////Users/stella/Desktop/help.png");
-    Image start = new Image("file:////Users/stella/Desktop/Start.png");
-    Image finish = new Image("file:////Users/stella/Desktop/Finish.png");
-    Image voldemort = new Image("file:////Users/stella/Desktop/targetVol.png");
-    Image you = new Image("file:////Users/stella/Desktop/targetYou.png");
+    Image lifeHeart = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/heart.png"));
+    Image wand = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/wand.png"));
+    Image potion = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/potion.png"));
+    Image timeTurner = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/timeTurner.png"));
+    Image ribbonItems = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/ribbonItems.png"));
+    Image ribbonLife = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/ribbonLife.png"));
+    Image help = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/help.png"));
+    Image start = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/Start.png"));
+    Image finish = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/Finish.png"));
+    Image voldemort = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/targetVol.png"));
+    Image you = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/targetYou.png"));
     Image steps = new Image (new File("/Users/stella/Desktop/steps.gif").toURI().toString());
 
     Random rand = new Random();
@@ -99,7 +99,7 @@ public class newMaze extends Application {
         createLifeLegend();
 
         // Background of the game
-        Image backgroundImage = new Image("file:///Users/stella/Desktop/sfondo.jpg");
+        Image backgroundImage = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/sfondo.png"));
 
         //BackgroundSize backgroundSize = new BackgroundSize(3000, 2000, false, false, true, false);
         BackgroundImage backgroundImageObject = new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
