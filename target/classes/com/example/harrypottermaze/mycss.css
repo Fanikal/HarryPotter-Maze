@@ -1,0 +1,5 @@
+        .homeRoot {
+            -fx-background-image: url("hp.jfif");
+            -fx-background-size: cover;
+            -fx-background-repeat: no-repeat;
+        }
