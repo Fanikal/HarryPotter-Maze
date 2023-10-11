@@ -598,7 +598,6 @@ public class newMaze extends Application {
                 ImageView iconView = new ImageView(recordIcon);
                 iconView.setFitHeight(50);
                 iconView.setPreserveRatio(true);
-                openDoor();
 
                 root.setVgap(0);
                 root.setHgap(0);
@@ -620,7 +619,11 @@ public class newMaze extends Application {
                     boolean magicPhraseRecognized = TranscriberDemo.recognizeOpenMap();
                     if (magicPhraseRecognized) {
                         // Open the selectCharacter screen
-                        openDoor();
+                        try {
+                            openDoor();
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
                     } else {
                         // showing a message that the game cannot be opened
                         System.out.println("Sorry, cannot open the game");
@@ -637,9 +640,9 @@ public class newMaze extends Application {
     }
 
     //Modify the door to rend it 0 and trasparent
-    private void openDoor()
-    {
+    private void openDoor() throws IOException {
         maze[4][12] = 0;
+
 
     }
 

@@ -89,22 +89,18 @@ public class selectCharacter extends Application {
         titlePane.setAlignment(Pos.CENTER);
 
          // VBox for the title "Select character"
-        Label titleLabel = new Label("Select character");
-        titleLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #302c2c;");
+        Label titleLabel = new Label("Swipe to select character");
+        titleLabel.setFont(Font.font("Zapfino", 22));
+        titleLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #302c2c;");
         titlePane.getChildren().add(titleLabel);
 
         // VBox that contains the label and button under the image
         VBox labelAndButtonBox = new VBox(10);
         labelAndButtonBox.setAlignment(Pos.CENTER);
 
-        // label for "Swipe to select character"
-        Label underLabel = new Label("Swipe to select character");
-        underLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #302c2c;");
-        underLabel.setPadding(new Insets(0, 0, 0, 0));
-
         // button for "Let's go"
         Button letsstartButton = new Button("Let's go");
-        letsstartButton.setStyle("-fx-font-size: 18px;");
+        letsstartButton.setFont(Font.font("Zapfino"));
         letsstartButton.getStyleClass().add("main-button");
 
         letsstartButton.setOnAction(event -> {
@@ -118,7 +114,7 @@ public class selectCharacter extends Application {
             primaryStage.close();
         });
 
-        labelAndButtonBox.getChildren().addAll(underLabel, letsstartButton);
+        labelAndButtonBox.getChildren().addAll(letsstartButton);
 
         // VBox that contains the character image and the label/button VBox
         VBox characterBox = new VBox(0); // 20 pixels spacing

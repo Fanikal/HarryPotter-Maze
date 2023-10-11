@@ -63,8 +63,9 @@ public class selectHouse extends Application {
             Font customFont = Font.loadFont(new FileInputStream("C:\\Users\\Fani\\AppData\\Local\\Microsoft\\Windows\\Fonts\\ZapfinoExtraLT-One.otf"), 25);
 
             Label titleLabel = new Label("Select your house");
+            titleLabel.setFont(Font.font("Zapfino", 24));
             titleLabel.setFont(customFont);
-            titleLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+            titleLabel.setStyle(" -fx-font-weight: bold;");
             titleLabel.setAlignment(Pos.CENTER);
 
         } catch (FileNotFoundException e) {
@@ -74,6 +75,7 @@ public class selectHouse extends Application {
         }
 
         Label titleLabel = new Label("Select your house");
+        titleLabel.setFont(Font.font("Zapfino", 24 ));
         titlePane.getChildren().add(titleLabel);
 
         // ImageViews for the house images
@@ -93,7 +95,7 @@ public class selectHouse extends Application {
 
         // "Let's go" button
         Button letsGoButton = new Button("Let's go");
-        letsGoButton.setStyle("-fx-font-size: 18px;");
+        letsGoButton.setFont(Font.font("Zapfino"));
         letsGoButton.setAlignment(Pos.CENTER);
         letsGoButton.getStyleClass().add("main-button");
 

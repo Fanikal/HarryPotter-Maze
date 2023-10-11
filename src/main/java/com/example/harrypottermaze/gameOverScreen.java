@@ -65,7 +65,7 @@ public class gameOverScreen extends Application {
 
         // Create a Text node for the message ("Time is up" or "Lives are up")
         Text messageText = new Text(msgToShow);
-        messageText.setFont(Font.font("Verdana", 20));
+        messageText.setFont(Font.font("Zampfino", 20));
         messageText.setTranslateY(-180);
 
         VBox messageBox = new VBox();

@@ -5,21 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="237484c2-557a-4fee-970c-ea4088a99d9e" name="Changes" comment="Added unversioned items">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/harrypottermaze/gameOverScreen.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/harrypottermaze/pauseScreen.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/harrypottermaze/winScreen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/harrypottermaze/homeScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/harrypottermaze/homeScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/harrypottermaze/gameOverScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/harrypottermaze/gameOverScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/harrypottermaze/newMaze.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/harrypottermaze/newMaze.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/harrypottermaze/pauseScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/harrypottermaze/pauseScreen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/harrypottermaze/selectCharacter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/harrypottermaze/selectCharacter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/harrypottermaze/selectHouse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/harrypottermaze/selectHouse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/harrypottermaze/winScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/harrypottermaze/winScreen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/harrypottermaze/mycss.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/harrypottermaze/mycss.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/harrypottermaze/FreeformDrawingGame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/harrypottermaze/FreeformDrawingGame.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/harrypottermaze/gameOverScreen.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/harrypottermaze/gameOverScreen.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/harrypottermaze/homeScreen.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/harrypottermaze/homeScreen.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/harrypottermaze/mycss.css" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/harrypottermaze/mycss.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/harrypottermaze/newMaze.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/harrypottermaze/newMaze.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/harrypottermaze/ribbon 2.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/harrypottermaze/pauseScreen.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/harrypottermaze/pauseScreen.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/harrypottermaze/selectCharacter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/harrypottermaze/selectCharacter.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/harrypottermaze/selectHouse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/harrypottermaze/selectHouse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/harrypottermaze/winScreen.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/harrypottermaze/winScreen.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cmu/sphinx/models/en-us/cmudict-en-us.dict" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cmu/sphinx/models/en-us/cmudict-en-us.dict" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,27 +54,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/Fani/IdeaProjects/HarryPotter/HarryPotterMaze",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "configurable.group.editor",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Fani/IdeaProjects/HarryPotter/HarryPotterMaze&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.editor&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main/resources/com/example/harrypottermaze" />
