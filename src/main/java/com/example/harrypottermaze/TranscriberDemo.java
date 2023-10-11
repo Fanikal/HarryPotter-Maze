@@ -15,12 +15,11 @@ import edu.cmu.sphinx.api.LiveSpeechRecognizer;
 import edu.cmu.sphinx.api.StreamSpeechRecognizer;
 
 public class TranscriberDemo {
+    private static boolean door = false;
 
-    private Configuration configuration;
-    private static LiveSpeechRecognizer recognizer;
-    private static List<String> requiredWords;
+    public TranscriberDemo(Boolean door) throws IOException {
+        this.door = door;
 
-    public TranscriberDemo() throws IOException {
         // Initialize configuration, recognizer, and requiredWords list in the constructor
         configuration = new Configuration();
         URL modelBaseURL = TranscriberDemo.class.getResource("/edu/cmu/sphinx/models/en-us/");
@@ -31,6 +30,14 @@ public class TranscriberDemo {
         configuration.setLanguageModelPath(modelBasePath + "en-us.lm.bin");
 
         recognizer = new LiveSpeechRecognizer(configuration);
+    }
+
+    private Configuration configuration;
+    private static LiveSpeechRecognizer recognizer;
+    private static List<String> requiredWords;
+    private static List<String> requiredWordsDoor;
+
+    public TranscriberDemo() throws IOException {
 
         requiredWords = new ArrayList<>();
         requiredWords.add("solemnly");
@@ -41,6 +48,10 @@ public class TranscriberDemo {
         requiredWords.add("to");
         requiredWords.add("no");
         requiredWords.add("good");
+        requiredWordsDoor.add("open");
+        requiredWordsDoor.add("the");
+        requiredWordsDoor.add("door");
+
     }
 
     public static boolean recognizeOpenMap() {
@@ -53,19 +64,42 @@ public class TranscriberDemo {
 
         if (rawResult != null) {
             String hypothesis = rawResult.getHypothesis();
+            System.out.println("Recognised:" + hypothesis);
             String[] recognizedWords = hypothesis.split("\\s+");
+            String[] recognizedWordsDoors = hypothesis.split("\\s+");
             int recognizedWordsCount = 0;
-            for (String recognizedWord : recognizedWords) {
-                if (requiredWords.contains(recognizedWord.toLowerCase())) {
-                    recognizedWordsCount++;
+            int recognizedWordsDoorCount = 0;
+            if(door == false)
+            {
+                for (String recognizedWord : recognizedWords) {
+                    if (requiredWords.contains(recognizedWord.toLowerCase())) {
+                        recognizedWordsCount++;
+                    }
                 }
+
+                if (recognizedWordsCount >= 2) {
+                    // The phrase was correct and the game will open
+                    System.out.println("Opening the game!");
+                    return true;
+                }
+
+            }else{
+
+                for (String recognizedWordDoor : recognizedWordsDoors) {
+                    if (requiredWordsDoor.contains(recognizedWordDoor.toLowerCase())) {
+                        recognizedWordsDoorCount++;
+                    }
+                }
+
+                if (recognizedWordsDoorCount >= 2) {
+                    // The phrase was correct and the open will open
+                    System.out.println("Opening the door!");
+                    door = false;
+                    return true;
+                }
+
             }
 
-            if (recognizedWordsCount >= 2) {
-                // The phrase was correct and the game will open
-                System.out.println("Opening the game!");
-                return true;
-            }
             System.out.println("Recognized: " + hypothesis);
         }
 

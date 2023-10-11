@@ -10,6 +10,9 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.effect.Effect;
+import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -24,6 +27,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 
 
@@ -49,6 +53,7 @@ public class newMaze extends Application {
     private Timeline timeline;
     private int remainingMinutes;
     private int remainingSeconds;
+    private TranscriberDemo transcriberDemo;
 
 
     Image lifeHeart = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/heart.png"));
@@ -65,6 +70,12 @@ public class newMaze extends Application {
     Image steps = new Image (new File("/Users/stella/Desktop/steps.gif").toURI().toString());
 
     Random rand = new Random();
+
+    // Background of the game
+    Image backgroundImage = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/sfondo.jpg"));
+
+    BackgroundImage backgroundImageObject = new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+    Background background = new Background(backgroundImageObject);
 
     int numWand = 0;
 
@@ -85,7 +96,8 @@ public class newMaze extends Application {
 
     //TODO:  the game menu,change the background and the characters, add voldemort and the fight, add the door
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws IOException {
+
 
         initializeMaze();
         playerRow = 1;
@@ -98,12 +110,6 @@ public class newMaze extends Application {
         player = drawPlayer();
         createLifeLegend();
 
-        // Background of the game
-        Image backgroundImage = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/sfondo.png"));
-
-        //BackgroundSize backgroundSize = new BackgroundSize(3000, 2000, false, false, true, false);
-        BackgroundImage backgroundImageObject = new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
-        Background background = new Background(backgroundImageObject);
 
         ImageView helpImageView = new ImageView(help);
         helpImageView.setFitHeight(50);
@@ -212,7 +218,7 @@ public class newMaze extends Application {
         };
     }
 
-    private void drawMaze() {
+    private void drawMaze() throws IOException {
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLUMNS; col++) {
                 Rectangle cell = new Rectangle(CELL_SIZE, CELL_SIZE);
@@ -227,7 +233,7 @@ public class newMaze extends Application {
                     cell.setFill(Color.TRANSPARENT); //Empty
                 else if(maze[row][col] == 3){
                     cell.setFill(Color.SADDLEBROWN);
-                    doorOpen(cell);
+                    managingDoorOpen(cell);
                 }
 
 
@@ -509,6 +515,7 @@ public class newMaze extends Application {
                     Stage helpStage = new Stage();
                     Scene helpScene = new Scene(root, 500, 500);
                     helpStage.setTitle("HELP");
+                    root.setBackground(background);
                     helpStage.setScene(helpScene);
                     helpStage.show();
                     timeline.stop(); //TODO: do the help menu with a play button and when you click on it the time start again
@@ -528,6 +535,7 @@ public class newMaze extends Application {
         Stage gameOverStage = new Stage();
         Scene gameOverScene = new Scene(root, 500, 500);
         gameOverStage.setTitle("GAME OVER");
+        root.setBackground(background);
         gameOverStage.setScene(gameOverScene);
         gameOverStage.show();
         timeline.stop();
@@ -546,6 +554,7 @@ public class newMaze extends Application {
             Stage pauseStage = new Stage();
             Scene pauseScene = new Scene(root, 500, 500);
             pauseStage.setTitle("PAUSE");
+            root.setBackground(background);
             pauseStage.setScene(pauseScene);
             pauseStage.show();
             timeline.stop();
@@ -553,19 +562,89 @@ public class newMaze extends Application {
         }
     }
 
-    private void doorOpen(Rectangle cell){
+    //managing the voldemort fight, when you touch voldemort with the mouse you can fight drawing a circle, if voldemort touches you you lost hearts
+    /*private void voldemortfight(Rectangle cell){ //TODO: the cell is voldemort that keep moving with animation
 
         cell.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
+
+                FreeformDrawingGame draw = new FreeformDrawingGame();
+                Stage fightStage = new Stage();
+                draw.start(fightStage);
+                fightStage.setTitle("OPEN THE DOOR");
+
+                fightStage.show();
+                //TODO: when the circle is completed you have to
 
 
         });
 
 
+    }*/
+
+
+   //managing the open of the door with the formula, when you're in front of the door and touch it with the mouse a window open to let you say the formula "Open the door"
+    public void managingDoorOpen(Rectangle cell) throws IOException {
+        cell.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
+            if (playerRow == 4 && playerCol == 11) {
+
+                try {
+                    transcriberDemo = new TranscriberDemo(true);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                GridPane root = new GridPane();
+                Image recordIcon = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/record.png"));
+                // creating an ImageView for the icon
+                ImageView iconView = new ImageView(recordIcon);
+                iconView.setFitHeight(50);
+                iconView.setPreserveRatio(true);
+                openDoor();
+
+                root.setVgap(0);
+                root.setHgap(0);
+                root.setAlignment(Pos.CENTER);
+                Stage doorStage = new Stage();
+                Scene doorScene = new Scene(root, 500, 500);
+                doorStage.setTitle("OPEN THE DOOR");
+                root.setBackground(background);
+                Label textDoor = new Label("Click the vocal icon and say: 'Open the door'");
+                textDoor.setAlignment(Pos.CENTER);
+                textDoor.setTranslateY(-150);
+                textDoor.setFont(Font.font("Zapfino", 24));
+                textDoor.setStyle("fx-font-weight: bold; -fx-text-fill: #302c2c;");
+                final Effect glow = new Glow(1.0);
+                textDoor.setEffect(glow);
+                root.getChildren().addAll(textDoor, iconView);
+
+                iconView.setOnMouseClicked(e -> {
+                    boolean magicPhraseRecognized = TranscriberDemo.recognizeOpenMap();
+                    if (magicPhraseRecognized) {
+                        // Open the selectCharacter screen
+                        openDoor();
+                    } else {
+                        // showing a message that the game cannot be opened
+                        System.out.println("Sorry, cannot open the game");
+                    }
+                });
+
+                doorStage.setScene(doorScene);
+                doorStage.show();
+
+
+            }
+
+        });
+    }
+
+    //Modify the door to rend it 0 and trasparent
+    private void openDoor()
+    {
+        maze[4][12] = 0;
+
     }
 
 
-
-    public static void main(String[] args) {
+        public static void main(String[] args) {
         launch(args);
     }
 
