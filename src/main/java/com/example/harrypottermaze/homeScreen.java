@@ -144,7 +144,6 @@ public class homeScreen extends Application {
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
-        primaryStage.close();
     }
 }
 
