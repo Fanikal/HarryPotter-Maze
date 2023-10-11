@@ -10,8 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -45,6 +44,13 @@ public class selectCharacter extends Application {
         // We set the height of the stage
         primaryStage.setHeight(800);
         primaryStage.setWidth(700);
+
+        // Background of the game
+        Image backgroundImage = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/sfondo.jpg"));
+        BackgroundImage backgroundImageObject = new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+        Background background = new Background(backgroundImageObject);
+
+        selectCharRoot.setBackground(background);
 
         // Creation of the scene that contains root as a root pane
         Scene scene = new Scene(selectCharRoot);
@@ -99,6 +105,18 @@ public class selectCharacter extends Application {
         // button for "Let's go"
         Button letsstartButton = new Button("Let's go");
         letsstartButton.setStyle("-fx-font-size: 18px;");
+        letsstartButton.getStyleClass().add("main-button");
+
+        letsstartButton.setOnAction(event -> {
+            selectHouse sHouse = new selectHouse();
+            try {
+                sHouse.start(new Stage());
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+            // Close the welcome screen
+            primaryStage.close();
+        });
 
         labelAndButtonBox.getChildren().addAll(underLabel, letsstartButton);
 

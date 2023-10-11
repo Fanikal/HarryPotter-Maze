@@ -10,9 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -48,6 +46,13 @@ public class selectHouse extends Application {
 
         // Creation of the scene that contains root as a root pane
         Scene scene = new Scene(selectLocationRoot);
+
+        // Background of the game
+        Image backgroundImage = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/sfondo.jpg"));
+        BackgroundImage backgroundImageObject = new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+        Background background = new Background(backgroundImageObject);
+
+        selectLocationRoot.setBackground(background);
 
         // VBox for the title
         VBox titlePane = new VBox();
@@ -90,12 +95,20 @@ public class selectHouse extends Application {
         Button letsGoButton = new Button("Let's go");
         letsGoButton.setStyle("-fx-font-size: 18px;");
         letsGoButton.setAlignment(Pos.CENTER);
+        letsGoButton.getStyleClass().add("main-button");
 
         buttonPane.getChildren().add(letsGoButton);
 
         // Handle button click event
         letsGoButton.setOnAction(e -> {
-            // to be done - to go to the next screen
+                newMaze nMaze = new newMaze();
+                try {
+                    nMaze.start(new Stage());
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+                // Close the welcome screen
+                primaryStage.close();
         });
 
         // Adding all elements to the root pane
