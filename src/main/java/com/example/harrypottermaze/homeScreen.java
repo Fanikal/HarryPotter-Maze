@@ -23,7 +23,7 @@ import java.util.Objects;
 public class homeScreen extends Application {
 
     private Stage primaryStage;
-    private TranscriberDemo transcriberDemo;
+    private TranscriberDemoHome transcriberDemo;
 
     public static void main(String[] args) {
         // Launch of the application
@@ -40,7 +40,7 @@ public class homeScreen extends Application {
         homeRoot.setAlignment(Pos.CENTER);
         homeRoot.getStyleClass().add("homeRoot");
 
-            transcriberDemo = new TranscriberDemo(); // Initializing the TranscriberDemo
+            transcriberDemo = new TranscriberDemoHome(); // Initializing the TranscriberDemo
 
         // We set the height of the stage
         primaryStage.setHeight(800);
@@ -90,7 +90,7 @@ public class homeScreen extends Application {
         homeRoot.getChildren().add(textVBox);
 
         iconView.setOnMouseClicked(event -> {
-            boolean magicPhraseRecognized = TranscriberDemo.recognizeOpenMap();
+            boolean magicPhraseRecognized = TranscriberDemoHome.recognizeOpenMap();
             if (magicPhraseRecognized) {
                 // Open the selectCharacter screen
                 primaryStage.close();

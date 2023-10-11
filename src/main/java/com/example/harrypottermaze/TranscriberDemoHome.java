@@ -14,13 +14,13 @@ import edu.cmu.sphinx.api.SpeechResult;
 import edu.cmu.sphinx.api.LiveSpeechRecognizer;
 import edu.cmu.sphinx.api.StreamSpeechRecognizer;
 
-public class TranscriberDemo {
+public class TranscriberDemoHome {
 
     private Configuration configuration;
     private static LiveSpeechRecognizer recognizer;
     private static List<String> requiredWords;
 
-    public TranscriberDemo() throws IOException {
+    public TranscriberDemoHome() throws IOException {
         // Initialize configuration, recognizer, and requiredWords list in the constructor
         configuration = new Configuration();
         URL modelBaseURL = TranscriberDemo.class.getResource("/edu/cmu/sphinx/models/en-us/");
@@ -33,9 +33,14 @@ public class TranscriberDemo {
         recognizer = new LiveSpeechRecognizer(configuration);
 
         requiredWords = new ArrayList<>();
-        requiredWords.add("open");
-        requiredWords.add("the");
-        requiredWords.add("door");
+        requiredWords.add("solemnly");
+        requiredWords.add("swear");
+        requiredWords.add("i");
+        requiredWords.add("that");
+        requiredWords.add("up");
+        requiredWords.add("to");
+        requiredWords.add("no");
+        requiredWords.add("good");
     }
 
     public static boolean recognizeOpenMap() {
@@ -58,7 +63,7 @@ public class TranscriberDemo {
 
             if (recognizedWordsCount >= 2) {
                 // The phrase was correct and the game will open
-                System.out.println("Opening the door!");
+                System.out.println("Opening the game!");
                 return true;
             }
             System.out.println("Recognized: " + hypothesis);
