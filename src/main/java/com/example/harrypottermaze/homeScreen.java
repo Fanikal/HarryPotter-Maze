@@ -1,14 +1,10 @@
 package com.example.harrypottermaze;
 
-import javafx.animation.FadeTransition;
-import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.effect.Effect;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
@@ -20,7 +16,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -98,6 +93,7 @@ public class homeScreen extends Application {
             boolean magicPhraseRecognized = TranscriberDemo.recognizeOpenMap();
             if (magicPhraseRecognized) {
                 // Open the selectCharacter screen
+                primaryStage.close();
                 openSelectCharacterScreen();
             } else {
                 // showing a message that the game cannot be opened
@@ -148,7 +144,6 @@ public class homeScreen extends Application {
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
-        // Close the welcome screen
         primaryStage.close();
     }
 }
