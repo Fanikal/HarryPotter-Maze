@@ -18,8 +18,7 @@ public class gameOverScreen extends Application {
     private String timeSpent;
     private String msgToShow = "You didn't escape on time..!";
 
-    public gameOverScreen(String timeSpent, boolean timeIsUp) {
-        this.timeSpent = timeSpent;
+    public gameOverScreen(boolean timeIsUp) {
 
         if (timeIsUp) {
             msgToShow = "You didn't escape on time..!";

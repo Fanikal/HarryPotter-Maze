@@ -37,6 +37,8 @@ public class newMaze extends Application {
     private static final int MINUTES = 3;
     private static final int SECONDS = 0;
 
+    private FreeformDrawingGame drawingGame;
+
 
     private int playerRow;
     private int playerCol;
@@ -56,6 +58,7 @@ public class newMaze extends Application {
 
 
     private Timeline timeline;
+    private Timeline voldemortTimeline;
     private int remainingMinutes;
     private int remainingSeconds;
     private TranscriberDemo transcriberDemo;
@@ -143,9 +146,6 @@ public class newMaze extends Application {
         moveVoldemort();
 
         createLifeLegend();
-
-        pauseScreen = new pauseScreen();
-
         ImageView startView = new ImageView(start);
         startView.setFitHeight(80);
         startView.setFitWidth(80);
@@ -183,7 +183,7 @@ public class newMaze extends Application {
                             remainingSeconds = 59;
                         } else {
                             timeline.stop();
-                            gameOverWindow();
+                            gameOverWindow(true, primaryStage);
                         }
                     }
                     timerText.setText(getFormattedTime());
@@ -208,24 +208,26 @@ public class newMaze extends Application {
         Scene scene = new Scene(grid, COLUMNS * CELL_SIZE, ROWS * CELL_SIZE);
         primaryStage.setTitle("Harry Potter's Maze");
 
-
+        com.example.harrypottermaze.pauseScreen.PauseCallback pauseCallback = resumeClicked -> {
+            if (resumeClicked) {
+                timeStart(); // Restart the timer
+            }
+        };
 
         //Controls the player movement event and control the pause menu //TODO: adjust the closing of the pause panel in pauseScreen
         scene.setOnKeyPressed(event -> {
             movePlayer(event.getCode());
 
-
             if (event.getCode() == KeyCode.SPACE) {
-                //setSpacePressed(true);
-                Stage stage = new Stage();
-                pauseScreen.start(stage);
                 timeStop();
+                Stage pauseStage = new Stage();
+                pauseScreen pause = new pauseScreen(primaryStage, pauseCallback);
+                pause.start(pauseStage);
+
             }
 
 
         });
-
-
 
         // We set the height of the stage
         primaryStage.setHeight(3000);
@@ -246,6 +248,12 @@ public class newMaze extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    public void checkResumeStatus(boolean resumeButtonClicked) {
+        if (resumeButtonClicked) {
+            timeStart();
+        }
     }
 
     private void initializeMaze() {
@@ -330,6 +338,11 @@ public class newMaze extends Application {
         return targetVol;
     }
 
+    public void removeFlag(Rectangle flag) {
+        if (flag != null) {
+            mazeGrid.getChildren().remove(flag);
+        }
+    }
     //Manage the movement of the player with the WASD or arrows also manage the movement of the target
     private void movePlayer(KeyCode keyCode) {
         int newRow = playerRow;
@@ -429,9 +442,9 @@ public class newMaze extends Application {
             });
 
 
-            Timeline voldemortTimeline = new Timeline(keyFrame);
-            voldemortTimeline.setCycleCount(Timeline.INDEFINITE);
-            voldemortTimeline.play();
+        voldemortTimeline = new Timeline(keyFrame);
+        voldemortTimeline.setCycleCount(Timeline.INDEFINITE);
+        voldemortTimeline.play();
 
     }
 
@@ -611,6 +624,24 @@ public class newMaze extends Application {
         return result;
     }
 
+    // remove voldemort from the grid
+    void removeVoldemort() {
+        // Stop the Voldemort timeline
+        voldemortTimeline.stop();
+        voldemortTarget = null;
+        targetVold.setFill(Color.TRANSPARENT);
+        targetVold = null;
+
+        // Remove the flag
+        Rectangle flag = getNodeByRowColumnIndex(tvRow, tvCol, mazeGrid);
+        removeFlag(flag);
+
+        // Remove Voldemort from the maze
+        mazeGrid.getChildren().removeAll(voldemort, targetVold);
+        voldemort = null;
+        System.out.println("removing Voldemort");
+    }
+
 
     //check the valid movement of the player
     private boolean isValidMove(int row, int col) {
@@ -623,20 +654,17 @@ public class newMaze extends Application {
 
 
     //Managing the game over menu
-    private void gameOverWindow(){
+    private void gameOverWindow(boolean timeIsUp, Stage primaryStage){
 
-        GridPane root = new GridPane();
-
-        root.setVgap(0);
-        root.setHgap(0);
-        root.setAlignment(Pos.CENTER);
-        Stage gameOverStage = new Stage();
-        Scene gameOverScene = new Scene(root, 500, 500);
-        gameOverStage.setTitle("GAME OVER");
-        root.setBackground(background);
-        gameOverStage.setScene(gameOverScene);
-        gameOverStage.show();
-        timeStop();
+        //open the gameOverScreen
+        gameOverScreen GameOverScreen = new gameOverScreen(timeIsUp);
+        try {
+            GameOverScreen.start(new Stage());
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+        // Close the new maze screen
+        primaryStage.close();
 
     }
 
@@ -661,6 +689,7 @@ public class newMaze extends Application {
                 iconView.setTranslateY(80);
                 iconView.setFitHeight(50);
                 iconView.setPreserveRatio(true);
+
 
                 root.setVgap(0);
                 root.setHgap(0);
@@ -712,21 +741,21 @@ public class newMaze extends Application {
         cell.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             if(maze[4][12] == 0){
 
-                FreeformDrawingGame draw = new FreeformDrawingGame();
-                Stage fightStage = new Stage();
-                draw.start(fightStage);
-                fightStage.setTitle("FIGHT WITH VOLDEMORT");
 
-                fightStage.show();
-                //TODO: when the circle is completed you have to
+
+                if (drawingGame == null) {
+                    drawingGame = new FreeformDrawingGame(this);
+                    drawingGame.startDrawingGame();
+                }
 
             }
 
 
         });
 
-
     }
+
+
 
 
     public void timeStart(){
