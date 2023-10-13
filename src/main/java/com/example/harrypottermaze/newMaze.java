@@ -9,8 +9,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.effect.Effect;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
@@ -26,7 +24,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
@@ -35,20 +32,28 @@ public class newMaze extends Application {
 
     private static final int ROWS = 12;
     private static final int COLUMNS = 23;
-    private static final int CELL_SIZE = 40;
+    private static final int CELL_SIZE = 45;
 
-    private static final int MINUTES = 1;
+    private static final int MINUTES = 3;
     private static final int SECONDS = 0;
 
 
     private int playerRow;
     private int playerCol;
+    private int youRow;
+    private int youCol;
+    private int volRow;
+    private int volCol;
+    private int tvRow;
+    private int tvCol;
+
+
 
     private double startX;
     private double startY;
     private Text timerText;
 
-    private boolean isGamePaused = false;
+
 
     private Timeline timeline;
     private int remainingMinutes;
@@ -62,12 +67,12 @@ public class newMaze extends Application {
     Image timeTurner = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/timeTurner.png"));
     Image ribbonItems = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/ribbonItems.png"));
     Image ribbonLife = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/ribbonLife.png"));
-    Image help = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/help.png"));
     Image start = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/Start.png"));
     Image finish = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/Finish.png"));
-    Image voldemort = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/targetVol.png"));
+    Image voldemortTarget = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/targetVol.png"));
     Image you = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/targetYou.png"));
-    Image steps = new Image (new File("/Users/stella/Desktop/steps.gif").toURI().toString());
+    Image steps = new Image (getClass().getResourceAsStream("/com/example/harrypottermaze/footstep.png"));
+    Image steps2 = new Image (getClass().getResourceAsStream("/com/example/harrypottermaze/footstep2.png"));
 
     Random rand = new Random();
 
@@ -84,13 +89,29 @@ public class newMaze extends Application {
     private GridPane legendItems;
     private GridPane life;
 
+
     private Rectangle player;
+    private Rectangle targetYou;
+    private Rectangle voldemort;
+    private Rectangle targetVold;
+    private pauseScreen pauseScreen;
 
 
     int numPotionsCollected = 0;
     int numWandCollected = 0;
     int numTimeCollected = 0;
     int numHearts = 3;
+
+   /* public boolean spacePressed = false;
+    public void setSpacePressed(boolean bool){
+        spacePressed = bool;
+
+    }
+
+    public boolean getSpacePressed(){
+        return spacePressed;
+
+    }*/
 
 
 
@@ -102,24 +123,46 @@ public class newMaze extends Application {
         initializeMaze();
         playerRow = 1;
         playerCol = 1;
+        youRow = 1;
+        youCol = 0;
+        volRow = 1;
+        volCol = 19;
+        tvRow = 1;
+        tvCol = 20;
 
         mazeGrid = new GridPane();
         legendItems = new GridPane(); //TODO: perchè non riesco a vedere gli oggetti collezionati dopo che ho messo la targa
         life = new GridPane();
         drawMaze();
         player = drawPlayer();
+        targetYou = drawTargetYou();
+        voldemort = drawVoldemort(true);
+        targetVold = drawTargetVol();
+
+
+        moveVoldemort();
+
         createLifeLegend();
 
+        pauseScreen = new pauseScreen();
 
-        ImageView helpImageView = new ImageView(help);
-        helpImageView.setFitHeight(50);
-        helpImageView.setFitWidth(50);
-        helpImageView.setTranslateY(450);
+        ImageView startView = new ImageView(start);
+        startView.setFitHeight(80);
+        startView.setFitWidth(80);
+        startView.setTranslateX(20);
+        startView.setTranslateY(-70);
+
+        ImageView finishView = new ImageView(finish);
+        finishView.setFitHeight(80);
+        finishView.setFitWidth(80);
+        finishView.setTranslateX(1170);
+        finishView.setTranslateY(-20);
+
 
         ImageView ribbonItemsView = new ImageView(ribbonItems);
         ribbonItemsView.setFitHeight(100);
         ribbonItemsView.setFitWidth(100);
-        ribbonItemsView.setTranslateY(-100);
+        ribbonItemsView.setTranslateY(-150);
 
 
         // Creation of the timer
@@ -127,7 +170,6 @@ public class newMaze extends Application {
         remainingSeconds = SECONDS;
         timerText = new Text(getFormattedTime());
         timerText.setFont(Font.font("Zapfino", 24));
-        //timerText.setStyle("-fx-background-image: url('/Users/stella/Desktop/ribbon.png');"); //TODO: perchè non vedo l'immagine dietro
         timerText.setFill(Color.BLACK);
 
         // Counting of time
@@ -148,7 +190,7 @@ public class newMaze extends Application {
                 })
         );
         timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.play();
+        timeStart();
 
         BorderPane timePane = new BorderPane();
         timePane.setTop(timerText);
@@ -156,8 +198,9 @@ public class newMaze extends Application {
         VBox grid = new VBox();
 
         grid.getChildren().addAll(mazeGrid, legendItems);
-        grid.getChildren().add(0,helpImageView);
         grid.getChildren().add(0, ribbonItemsView);
+        grid.getChildren().add(0, startView);
+        grid.getChildren().add(0, finishView);
         grid.getChildren().add(0, life);
         grid.getChildren().add(0, timePane);
 
@@ -165,35 +208,41 @@ public class newMaze extends Application {
         Scene scene = new Scene(grid, COLUMNS * CELL_SIZE, ROWS * CELL_SIZE);
         primaryStage.setTitle("Harry Potter's Maze");
 
-        //Controls the player movement event and control the pause menu
+
+
+        //Controls the player movement event and control the pause menu //TODO: adjust the closing of the pause panel in pauseScreen
         scene.setOnKeyPressed(event -> {
             movePlayer(event.getCode());
 
-            if (event.getCode() == KeyCode.SPACE){
-                showPauseMenu();
+
+            if (event.getCode() == KeyCode.SPACE) {
+                //setSpacePressed(true);
+                Stage stage = new Stage();
+                pauseScreen.start(stage);
+                timeStop();
             }
 
+
         });
+
+
 
         // We set the height of the stage
         primaryStage.setHeight(3000);
         primaryStage.setWidth(3000);
 
         mazeGrid.setAlignment(Pos.CENTER);
-        mazeGrid.setTranslateY(-200);
+        mazeGrid.setTranslateY(-330);
         legendItems.setAlignment(Pos.CENTER_LEFT);
         life.setAlignment(Pos.CENTER_LEFT);
-        ribbonItemsView.setTranslateY(280);
+        ribbonItemsView.setTranslateY(130);
         ribbonItemsView.setTranslateX(20);
 
         //mazeGrid.setTranslateY(80);
         legendItems.setTranslateX(20);
-        legendItems.setTranslateY(-270);
+        legendItems.setTranslateY(-430);
         life.setTranslateX(20);
         life.setTranslateY(250);
-        helpImageView.setTranslateX(1200);
-        helpImageView.setTranslateY(350);
-        helpWindow(helpImageView);
 
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -245,15 +294,43 @@ public class newMaze extends Application {
 
     public Rectangle drawPlayer() {
         Rectangle player = new Rectangle(CELL_SIZE, CELL_SIZE);
-        player.setFill(Color.GREEN);
-        //player.setFill((new ImagePattern(steps, 0, 0, 1, 1, true)));
+        player.setFill((new ImagePattern(steps, 0, 0, 1, 1, true)));
         mazeGrid.add(player, playerCol, playerRow);
         checkCollision(player);
 
         return player;
     }
 
-    //Manage the movement of the player with the WASD or arrows
+    public Rectangle drawTargetYou() {
+        Rectangle targetYou = new Rectangle(CELL_SIZE, CELL_SIZE);
+        targetYou.setFill((new ImagePattern(you, 0, 0, 1, 1, true)));
+        mazeGrid.add(targetYou, youCol, youRow);
+
+        return targetYou;
+    }
+
+    public Rectangle drawVoldemort(Boolean bool) {
+        if (bool) {
+            Rectangle voldemort = new Rectangle(CELL_SIZE, CELL_SIZE);
+            voldemort.setFill((new ImagePattern(steps2, 0, 0, 1, 1, true)));
+            mazeGrid.add(voldemort, volCol, volRow);
+            voldemortfight(voldemort);
+
+            return voldemort;
+        }else
+            return null;
+
+    }
+
+    public Rectangle drawTargetVol() {
+        Rectangle targetVol = new Rectangle(CELL_SIZE, CELL_SIZE);
+        targetVol.setFill((new ImagePattern(voldemortTarget, 0, 0, 1, 1, true)));
+        mazeGrid.add(targetVol, tvCol, tvRow);
+
+        return targetVol;
+    }
+
+    //Manage the movement of the player with the WASD or arrows also manage the movement of the target
     private void movePlayer(KeyCode keyCode) {
         int newRow = playerRow;
         int newCol = playerCol;
@@ -262,18 +339,22 @@ public class newMaze extends Application {
             case UP:
             case W:
                 newRow = playerRow - 1;
+
                 break;
             case DOWN:
             case S:
                 newRow = playerRow + 1;
+
                 break;
             case LEFT:
             case A:
                 newCol = playerCol - 1;
+
                 break;
             case RIGHT:
             case D:
                 newCol = playerCol + 1;
+
                 break;
             default:
                 break;
@@ -282,15 +363,79 @@ public class newMaze extends Application {
 
         // Controls if the movement is valid
         if (isValidMove(newRow, newCol)) {
-            mazeGrid.getChildren().remove(mazeGrid.getChildren().size() - 1); // Remove the player from the last position
+            mazeGrid.getChildren().removeAll(player, targetYou);
             playerRow = newRow;
             playerCol = newCol;
-            drawPlayer();
+            player = drawPlayer();
+            youRow = playerRow;
+            youCol = playerCol - 1;
+            targetYou = drawTargetYou();
 
         }
 
 
     }
+    private int calculateDirectionToPlayer() {
+        int rowDifference = playerRow - volRow;
+        int colDifference = playerCol - volCol;
+
+        if (rowDifference > 0) {
+            return 1;
+        } else if (rowDifference < 0) {
+            return 0;
+        } else if (colDifference > 0) {
+            return 3;
+        } else if (colDifference < 0) {
+            return 2;
+        }
+
+        return -1;
+    }
+
+
+    private void moveVoldemort() {
+
+            KeyFrame keyFrame = new KeyFrame(Duration.seconds(8), event -> {
+                int direction = calculateDirectionToPlayer();
+                int newRow = volRow;
+                int newCol = volCol;
+
+                switch (direction) {
+                    case 0: // UP
+                        newRow = volRow - 1;
+                        break;
+                    case 1: // DOWN
+                        newRow = volRow + 1;
+                        break;
+                    case 2: // LEFT
+                        newCol = volCol - 1;
+                        break;
+                    case 3: // RIGHT
+                        newCol = volCol + 1;
+                        break;
+                }
+
+                if (isValidMove(newRow, newCol)) {
+
+                    mazeGrid.getChildren().removeAll(voldemort, targetVold);
+                    volRow = newRow;
+                    volCol = newCol;
+                    voldemort = drawVoldemort(true);
+                    tvRow = volRow;
+                    tvCol = volCol + 1;
+                    targetVold = drawTargetVol();
+                }
+
+            });
+
+
+            Timeline voldemortTimeline = new Timeline(keyFrame);
+            voldemortTimeline.setCycleCount(Timeline.INDEFINITE);
+            voldemortTimeline.play();
+
+    }
+
+
 
     private void positionateItems(Rectangle cell, int row, int col){
         int num = rand.nextInt(100);
@@ -356,27 +501,6 @@ public class newMaze extends Application {
         life.getChildren().addAll(legend);
     }
 
-
-    /*private void updateLegend(int numCollection){
-
-        wandView.setFitHeight(30);
-        wandView.setFitWidth(30);
-
-        if(numWandCollected == 1){
-            legendItems.add(wandView, 0, 2);
-        }
-
-        for (int col = 0; col < numPotionsCollected; col++) {
-            legendItems.add(new ImageView(potion), col, 0);
-        }
-
-        // Aggiungi l'immagine dei Time Turner alla legenda
-        for (int col = 0; col < numTimeCollected; col++) {
-            legendItems.add(new ImageView(timeTurner), col, 1);
-        }
-
-
-    }*/
 
     //Check collision between the player and the items
     private void checkCollision(Rectangle player) {
@@ -497,32 +621,6 @@ public class newMaze extends Application {
         return String.format("%02d:%02d", remainingMinutes, remainingSeconds);
     }
 
-    private void helpWindow(ImageView image){
-        image.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            if (!isGamePaused) {
-                //Coordinates of the mouse
-                double mouseX = event.getX();
-                double mouseY = event.getY();
-
-                Bounds imageBounds = image.getBoundsInLocal();
-
-                if (imageBounds.contains(event.getX(), event.getY())) {
-                    GridPane root = new GridPane();
-
-                    root.setVgap(0);
-                    root.setHgap(0);
-                    root.setAlignment(Pos.CENTER);
-                    Stage helpStage = new Stage();
-                    Scene helpScene = new Scene(root, 500, 500);
-                    helpStage.setTitle("HELP");
-                    root.setBackground(background);
-                    helpStage.setScene(helpScene);
-                    helpStage.show();
-                    timeline.stop(); //TODO: do the help menu with a play button and when you click on it the time start again
-                }
-            }
-        });
-    }
 
     //Managing the game over menu
     private void gameOverWindow(){
@@ -538,57 +636,20 @@ public class newMaze extends Application {
         root.setBackground(background);
         gameOverStage.setScene(gameOverScene);
         gameOverStage.show();
-        timeline.stop();
+        timeStop();
 
     }
 
-    //Managing the pause menu
-    private void showPauseMenu(){ //TODO:Add the buttons restart and continue
 
-        if (!isGamePaused) {
-            GridPane root = new GridPane();
-
-            root.setVgap(0);
-            root.setHgap(0);
-            root.setAlignment(Pos.CENTER);
-            Stage pauseStage = new Stage();
-            Scene pauseScene = new Scene(root, 500, 500);
-            pauseStage.setTitle("PAUSE");
-            root.setBackground(background);
-            pauseStage.setScene(pauseScene);
-            pauseStage.show();
-            timeline.stop();
-            isGamePaused = true;
-        }
-    }
-
-    //managing the voldemort fight, when you touch voldemort with the mouse you can fight drawing a circle, if voldemort touches you you lost hearts
-    /*private void voldemortfight(Rectangle cell){ //TODO: the cell is voldemort that keep moving with animation
-
-        cell.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
-
-                FreeformDrawingGame draw = new FreeformDrawingGame();
-                Stage fightStage = new Stage();
-                draw.start(fightStage);
-                fightStage.setTitle("OPEN THE DOOR");
-
-                fightStage.show();
-                //TODO: when the circle is completed you have to
-
-
-        });
-
-
-    }*/
 
 
    //managing the open of the door with the formula, when you're in front of the door and touch it with the mouse a window open to let you say the formula "Open the door"
     public void managingDoorOpen(Rectangle cell) throws IOException {
         cell.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
-            if (playerRow == 4 && playerCol == 11) {
+            if (playerRow == 4 && playerCol == 11 && maze[4][12] == 3) {
 
                 try {
-                    transcriberDemo = new TranscriberDemo(true);
+                    transcriberDemo = new TranscriberDemo();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -596,6 +657,8 @@ public class newMaze extends Application {
                 Image recordIcon = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/record.png"));
                 // creating an ImageView for the icon
                 ImageView iconView = new ImageView(recordIcon);
+                iconView.setTranslateX(130);
+                iconView.setTranslateY(80);
                 iconView.setFitHeight(50);
                 iconView.setPreserveRatio(true);
 
@@ -606,24 +669,28 @@ public class newMaze extends Application {
                 Scene doorScene = new Scene(root, 500, 500);
                 doorStage.setTitle("OPEN THE DOOR");
                 root.setBackground(background);
-                Label textDoor = new Label("Click the vocal icon and say: 'Open the door'");
-                textDoor.setAlignment(Pos.CENTER);
-                textDoor.setTranslateY(-150);
-                textDoor.setFont(Font.font("Zapfino", 24));
-                textDoor.setStyle("fx-font-weight: bold; -fx-text-fill: #302c2c;");
+                Text textLine1 = new Text("Click the vocal icon and say:");
+                Text textLine2 = new Text("'Open the door'");
+                textLine1.setTranslateY(-100);
+                textLine2.setTranslateY(-30);
+                textLine2.setTranslateX(50);
+                textLine1.setFont(Font.font("Zapfino", 18));
+                textLine2.setFont(Font.font("Zapfino", 18));
+                textLine1.setStyle("fx-font-weight: bold; -fx-text-fill: #302c2c;");
+                textLine2.setStyle("fx-font-weight: bold; -fx-text-fill: #302c2c;");
                 final Effect glow = new Glow(1.0);
-                textDoor.setEffect(glow);
-                root.getChildren().addAll(textDoor, iconView);
+                textLine1.setEffect(glow);
+                textLine2.setEffect(glow);
+                root.getChildren().addAll(textLine1, textLine2, iconView);
 
                 iconView.setOnMouseClicked(e -> {
                     boolean magicPhraseRecognized = TranscriberDemo.recognizeOpenMap();
                     if (magicPhraseRecognized) {
                         // Open the selectCharacter screen
-                        try {
-                            openDoor();
-                        } catch (IOException ex) {
-                            throw new RuntimeException(ex);
-                        }
+                        maze[4][12] = 0;
+                        Rectangle cell2 = getNodeByRowColumnIndex(4, 12, mazeGrid);
+                        cell2.setFill(Color.TRANSPARENT);
+                        doorStage.close();
                     } else {
                         // showing a message that the game cannot be opened
                         System.out.println("Sorry, cannot open the game");
@@ -639,17 +706,41 @@ public class newMaze extends Application {
         });
     }
 
-    //Modify the door to rend it 0 and trasparent
-    private void openDoor() throws IOException {
-        maze[4][12] = 0;
+    //managing the voldemort fight, when you touch voldemort with the mouse you can fight drawing a circle, if voldemort touches you you lost hearts
+    private void voldemortfight(Rectangle cell){
+
+        cell.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            if(maze[4][12] == 0){
+
+                FreeformDrawingGame draw = new FreeformDrawingGame();
+                Stage fightStage = new Stage();
+                draw.start(fightStage);
+                fightStage.setTitle("FIGHT WITH VOLDEMORT");
+
+                fightStage.show();
+                //TODO: when the circle is completed you have to
+
+            }
+
+
+        });
 
 
     }
 
 
-        public static void main(String[] args) {
+    public void timeStart(){
+        timeline.play();
+    }
+
+    public void timeStop(){
+        timeline.stop();
+    }
+
+    public static void main(String[] args) {
         launch(args);
     }
+
 
 
 }
