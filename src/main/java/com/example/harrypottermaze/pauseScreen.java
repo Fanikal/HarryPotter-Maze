@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -23,6 +24,7 @@ public class pauseScreen extends Application {
         // Default constructor with no arguments
     }
 
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -34,6 +36,8 @@ public class pauseScreen extends Application {
 
         // Create a BorderPane to hold the content
         BorderPane root = new BorderPane();
+
+        //root.setBackground(background);
 
         // Background of the game
         Image backgroundImage = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/sfondo.jpg"));
@@ -47,17 +51,17 @@ public class pauseScreen extends Application {
 
         // Create an ImageView to display the image with a specified width and height
         ImageView pauseImageView = new ImageView(pauseImage);
-        pauseImageView.setFitWidth(800); // Set a larger width
-        pauseImageView.setFitHeight(400); // Set a larger height
+        pauseImageView.setFitWidth(800); // Set a larger width 800
+        pauseImageView.setFitHeight(400); // Set a larger height 400
         pauseImageView.setPreserveRatio(true); // Preserve image aspect ratio
+        pauseImageView.setTranslateY(-30);
         root.setAlignment(pauseImageView, Pos.CENTER);
-
 
 
         // Create a Text node for the message ("Time is up" or "Lives are up")
         Text messageText = new Text(msgToShow);
         messageText.setFont(Font.font("Zampfino", 20));
-        messageText.setTranslateY(-180);
+        messageText.setTranslateY(-130);
 
         VBox messageBox = new VBox();
         messageBox.setAlignment(Pos.CENTER);
@@ -75,6 +79,7 @@ public class pauseScreen extends Application {
             // Go back to the screen with the maze
         });
 
+
         restartButton.getStyleClass().add("main-button");
 
         // Create the "Exit" button
@@ -90,11 +95,13 @@ public class pauseScreen extends Application {
             }
         });
 
+
         exitButton.getStyleClass().add("main-button");
+
 
         // Add buttons to the button box
         buttonBox.getChildren().addAll(restartButton, exitButton);
-        buttonBox.setTranslateY(-200);
+        buttonBox.setTranslateY(-80);
 
         // Set the image at the top of the BorderPane
         root.setTop(pauseImageView);
@@ -105,18 +112,33 @@ public class pauseScreen extends Application {
         // Set the button box at the center of the BorderPane
         root.setBottom(buttonBox);
 
-        // Create the scene with the BorderPane as the root node
-        Scene gameOverScene = new Scene(root, 800, 600); // Adjust width and height as needed
 
-        // Set the scene for the game over stage
-        pauseStage.setScene(gameOverScene);
 
-        // Show the game over stage
+        Scene pauseScene = new Scene(root, 500, 500);
+        pauseStage.setScene(pauseScene);
+        pauseStage.setTitle("PAUSE");
         pauseStage.show();
+       // newMaze nm = new newMaze();
+
+ //TODO: not working and don't understand why
+        /*pauseScene.setOnKeyPressed(event -> {
+
+            if (event.getCode() == KeyCode.SPACE && nm.getSpacePressed() == true){
+                pauseStage.hide();
+                System.out.println("Space key pressed");
+                nm.timeStart();
+                nm.setSpacePressed(false);
+                System.out.println(nm.getSpacePressed());
+            }
+
+        });*/
 
         // Load the CSS file
-        gameOverScene.getStylesheets().add
+        pauseScene.getStylesheets().add
                 (winScreen.class.getResource("mycss.css").toExternalForm());
 
+
+
     }
+
 }

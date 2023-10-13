@@ -2,8 +2,9 @@ package com.example.harrypottermaze;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.stage.Stage;
@@ -13,6 +14,9 @@ public class FreeformDrawingGame extends Application {
     private Pane drawingPane;
     private Path currentPath;
     private boolean isDrawing = false;
+    Image backgroundImage = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/sfondo.jpg"));
+    BackgroundImage backgroundImageObject = new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+    Background background = new Background(backgroundImageObject);
 
 
     @Override
@@ -20,6 +24,7 @@ public class FreeformDrawingGame extends Application {
         primaryStage.setTitle("Circle Recognition");
 
         drawingPane = new Pane();
+        drawingPane.setBackground(background);
         drawingPane.setOnMousePressed(this::handleMousePressed);
         drawingPane.setOnMouseDragged(this::handleMouseDragged);
         drawingPane.setOnMouseReleased(this::handleMouseReleased);
@@ -46,16 +51,22 @@ public class FreeformDrawingGame extends Application {
         }
     }
 
-    private void handleMouseReleased(MouseEvent event) {
+    private boolean handleMouseReleased(MouseEvent event) {
         if (isDrawing) {
             // Check if the drawn path forms a closed circular-like shape
             if (isClosedCircularShape(currentPath)) {
                 currentPath.setStroke(Color.GREEN);
+                /*newMaze nm = new newMaze();
+                Rectangle voldemort = nm.drawVoldemort(false); //TODO: I don't know how to eliminate voldemort from the game after the circle*/
                 // to continue here, I need to add the battle with Voldemort
-            }
+                return true;
+            } else
+                return false;
 
-            isDrawing = false;
-        }
+        }isDrawing = false;
+
+        return false;
+
     }
 
     private boolean isClosedCircularShape(Path path) {
