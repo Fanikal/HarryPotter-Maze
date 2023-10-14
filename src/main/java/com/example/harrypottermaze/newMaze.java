@@ -140,7 +140,7 @@ public class newMaze extends Application {
 
 
 
-        moveVoldemort();
+        moveVoldemort(primaryStage);
 
         createLifeLegend();
         ImageView startView = new ImageView(start);
@@ -180,7 +180,7 @@ public class newMaze extends Application {
                             remainingSeconds = 59;
                         } else {
                             timeline.stop();
-                            gameOverWindow(true);
+                            gameOverWindow(true, primaryStage);
                         }
                     }
                     timerText.setText(getFormattedTime());
@@ -212,7 +212,7 @@ public class newMaze extends Application {
 
         //Controls the player movement event and control the pause menu
         scene.setOnKeyPressed(event -> {
-            movePlayer(event.getCode());
+            movePlayer(event.getCode(), primaryStage);
 
             if (event.getCode() == KeyCode.SPACE) {
                 timeStop();
@@ -226,8 +226,8 @@ public class newMaze extends Application {
         });
 
         // We set the height of the stage
-        primaryStage.setHeight(3000);
-        primaryStage.setWidth(3000);
+        primaryStage.setHeight(800);
+        primaryStage.setWidth(800);
 
         mazeGrid.setAlignment(Pos.CENTER);
         mazeGrid.setTranslateY(-330);
@@ -340,7 +340,7 @@ public class newMaze extends Application {
         }
     }
     //Manage the movement of the player with the WASD or arrows also manage the movement of the target
-    private void movePlayer(KeyCode keyCode) {
+    private void movePlayer(KeyCode keyCode, Stage primaryStage) {
         int newRow = playerRow;
         int newCol = playerCol;
 
@@ -381,7 +381,7 @@ public class newMaze extends Application {
             targetYou = drawTargetYou();
 
             if(playerRow > 0 && playerRow < 3 && playerCol == 22){
-                winWindow();
+                winWindow(primaryStage);
             }
 
         }
@@ -406,7 +406,7 @@ public class newMaze extends Application {
     }
 
 
-    private void moveVoldemort() {
+    private void moveVoldemort(Stage primaryStage) {
 
             KeyFrame keyFrame = new KeyFrame(Duration.seconds(3), event -> {
                 int direction = calculateDirectionToPlayer();
@@ -455,7 +455,7 @@ public class newMaze extends Application {
 
                         if (numHearts == 0) {
 
-                            gameOverWindow(false);
+                            gameOverWindow(false, primaryStage);
                         }
                     }
 
@@ -713,10 +713,10 @@ public class newMaze extends Application {
 
 
     //Managing the game over menu
-    private void gameOverWindow(boolean timeIsUp){
+    private void gameOverWindow(boolean timeIsUp, Stage primaryStage){
 
         //open the gameOverScreen
-        gameOverScreen GameOverScreen = new gameOverScreen(timeIsUp);
+        gameOverScreen GameOverScreen = new gameOverScreen(timeIsUp, primaryStage, selectedHouse);
         try {
             GameOverScreen.start(new Stage());
         } catch (Exception ex) {
@@ -727,10 +727,10 @@ public class newMaze extends Application {
     }
 
     //Managing the win menu
-    private void winWindow(){
+    private void winWindow(Stage primaryStage){
 
         //open the winScreen
-        winScreen winScreen = new winScreen();
+        winScreen winScreen = new winScreen(primaryStage, selectedHouse);
         try {
             winScreen.start(new Stage());
         } catch (Exception ex) {
@@ -745,8 +745,10 @@ public class newMaze extends Application {
 
    //managing the open of the door with the formula, when you're in front of the door and touch it with the mouse a window open to let you say the formula "Open the door"
     public void managingDoorOpen(Rectangle cell) throws IOException {
+        System.out.println("in managinDoor");
         cell.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
             if (playerRow == 4 && playerCol == 11 && maze[4][12] == 3 && collectedWand == true) {
+                System.out.println("collected wand etc");
 
                 try {
                     transcriberDemo = new TranscriberDemo();

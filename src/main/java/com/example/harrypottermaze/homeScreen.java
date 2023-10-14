@@ -32,6 +32,7 @@ public class homeScreen extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+
         // Definition of the stage
         primaryStage.setTitle("Harry Potter's Maze");
 
@@ -40,7 +41,7 @@ public class homeScreen extends Application {
         homeRoot.setAlignment(Pos.CENTER);
         homeRoot.getStyleClass().add("homeRoot");
 
-            transcriberDemo = new TranscriberDemoHome(); // Initializing the TranscriberDemo
+
 
         // We set the height of the stage
         primaryStage.setHeight(800);
@@ -52,9 +53,9 @@ public class homeScreen extends Application {
         // Create a VBox to hold multiple Text nodes
         VBox textVBox = new VBox();
         textVBox.setPadding(new Insets(600, 10, 10, 10));
-        textVBox.setAlignment(Pos.BOTTOM_CENTER); // Align at the bottom
+        textVBox.setAlignment(Pos.BOTTOM_CENTER);
 
-        // loading the icon image
+        // loading the record image
         Image recordIcon = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/record.png"));
 
         // creating an ImageView for the icon
@@ -89,7 +90,13 @@ public class homeScreen extends Application {
         // Add the VBox to the root pane
         homeRoot.getChildren().add(textVBox);
 
+        // handling the record icon event
         iconView.setOnMouseClicked(event -> {
+            try {
+                transcriberDemo = new TranscriberDemoHome(); // Initializing the TranscriberDemo
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             boolean magicPhraseRecognized = TranscriberDemoHome.recognizeOpenMap();
             if (magicPhraseRecognized) {
                 // Open the selectCharacter screen
@@ -100,28 +107,6 @@ public class homeScreen extends Application {
                 System.out.println("Sorry, cannot open the game");
             }
         });
-
-
-
-        /* Create a TranslateTransition to make the text scroll vertically
-        TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(15), movingPopup);
-        translateTransition.setFromY(-400);
-        translateTransition.setToY(400);
-        translateTransition.setCycleCount(TranslateTransition.INDEFINITE);
-        translateTransition.setAutoReverse(true);
-        translateTransition.play();
-
-         */
-
-        /* Create a button for "Let's go"
-        Button letsstartButton = new Button("Let's go");
-
-        // Add an action to the button to transition to selectCharacter with fade-in effect
-        letsstartButton.setOnAction(e -> {
-
-            });
-
-         */
 
         // We display the scene we just created in the stage
         primaryStage.setScene(scene);
@@ -137,6 +122,7 @@ public class homeScreen extends Application {
         }
     }
 
+    // method to handle the opening of the characters screen
     private void openSelectCharacterScreen() {
         selectCharacter selChar = new selectCharacter();
         try {

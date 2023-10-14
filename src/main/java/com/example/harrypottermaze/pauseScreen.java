@@ -35,9 +35,11 @@ public class pauseScreen extends Application {
 
     @Override
     public void start(Stage pauseStage) {
+
+        // title of the stage
         pauseStage.setTitle("Game: PAUSED");
 
-        // Create a BorderPane to hold the content
+        // BorderPane to hold the content
         BorderPane root = new BorderPane();
 
         // Background of the game
@@ -62,6 +64,7 @@ public class pauseScreen extends Application {
         messageText.setFont(Font.font("Zampfino", 20));
         messageText.setTranslateY(-130);
 
+        // VBOx for the messageText
         VBox messageBox = new VBox();
         messageBox.setAlignment(Pos.CENTER);
         messageBox.getChildren().add(messageText);
@@ -73,19 +76,25 @@ public class pauseScreen extends Application {
 
         // Create the "Restart" button
         Button resumeButton = new Button("Resume");
+        resumeButton.getStyleClass().add("main-button");
+
+        // handle the click of resume button
         resumeButton.setOnAction(event -> {
             callback.onResumeClicked(true);
             resumeButtonClicked = true;
             gameStage.show(); // Show the game stage (newMaze)
             pauseStage.close(); // Close the pause screen
         });
-        resumeButton.getStyleClass().add("main-button");
 
         // Create the "Exit" button
         Button exitButton = new Button("Exit");
+        exitButton.getStyleClass().add("main-button");
+
+        // handle the click of the exit button
         exitButton.setOnAction(event -> {
             // Go back to the home page
             pauseStage.close(); // Close the pause screen
+            gameStage.close();
             homeScreen hScreen = new homeScreen();
             try {
                 hScreen.start(new Stage());
@@ -93,7 +102,6 @@ public class pauseScreen extends Application {
                 throw new RuntimeException(e);
             }
         });
-        exitButton.getStyleClass().add("main-button");
 
         // Add buttons to the button box
         buttonBox.getChildren().addAll(resumeButton, exitButton);

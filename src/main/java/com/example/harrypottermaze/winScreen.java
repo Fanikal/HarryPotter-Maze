@@ -16,16 +16,13 @@ import java.io.IOException;
 
 public class winScreen extends Application {
 
-    private String timeSpent;
     private String msgToShow = "Mischief managed!";
+    private String selectedHouse;
+    private Stage gameStage;
 
-    public winScreen(String timeSpent) {
-        this.timeSpent = timeSpent;
-
-    }
-
-    public winScreen() {
-        // Default constructor with no arguments
+    public winScreen(Stage gameStage, String selectedHouse) {
+        this.gameStage = gameStage;
+        this.selectedHouse = selectedHouse;
     }
 
     public static void main(String[] args) {
@@ -35,9 +32,10 @@ public class winScreen extends Application {
     @Override
     public void start(Stage winStage) {
 
+        // title of the stage
         winStage.setTitle("Congrats");
 
-        // Create a BorderPane to hold the content
+        // BorderPane to hold the content
         BorderPane root = new BorderPane();
 
         // Background of the game
@@ -50,24 +48,22 @@ public class winScreen extends Application {
         // Load the "ribbon 3" image from resources
         Image winImage = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/ribbon 2.png"));
 
-        // Create an ImageView to display the image with a specified width and height
+        // ImageView to display the image with a specified width and height
         ImageView winImageView = new ImageView(winImage);
         winImageView.setFitWidth(800); // Set a larger width
         winImageView.setFitHeight(400); // Set a larger height
         winImageView.setPreserveRatio(true); // Preserve image aspect ratio
         root.setAlignment(winImageView, Pos.CENTER);
 
-
-
-        // Create a Text node for the message ("Time is up" or "Lives are up")
+        // Text node for the message ("Time is up" or "Lives are up")
         Text messageText = new Text(msgToShow);
         messageText.setFont(Font.font("Zampfino", 20));
         messageText.setTranslateY(-180);
 
+        // VBOx for the messageBox
         VBox messageBox = new VBox();
         messageBox.setAlignment(Pos.CENTER);
         messageBox.getChildren().add(messageText);
-
 
         // Create an HBox for the buttons
         HBox buttonBox = new HBox(20);
@@ -76,17 +72,30 @@ public class winScreen extends Application {
 
         // Create the "Restart" button
         Button restartButton = new Button("Start new game");
-        restartButton.setOnAction(event -> {
-            // Go back to the screen with the maze
-        });
-
         restartButton.getStyleClass().add("main-button");
+
+        // handle the events of restart button
+        restartButton.setOnAction(event -> {
+            System.out.println("Restarting game");
+            gameStage.close();
+            newMaze newMazeGame = new newMaze(selectedHouse);; // Create a new instance of the game
+            try {
+                newMazeGame.start(new Stage()); // Start the new game
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            winStage.close();
+        });
 
         // Create the "Exit" button
         Button exitButton = new Button("Exit");
+        exitButton.getStyleClass().add("main-button");
+
+        // handle the event of exit button
         exitButton.setOnAction(event -> {
             // Go back to the home page
-           winStage.close(); // Close the win screen
+            winStage.close(); // Close the win screen
+            gameStage.close();
             homeScreen hScreen = new homeScreen();
             try {
                 hScreen.start(new Stage());
@@ -94,8 +103,6 @@ public class winScreen extends Application {
                 throw new RuntimeException(e);
             }
         });
-
-        exitButton.getStyleClass().add("main-button");
 
         // Add buttons to the button box
         buttonBox.getChildren().addAll(restartButton, exitButton);
@@ -111,7 +118,7 @@ public class winScreen extends Application {
         root.setBottom(buttonBox);
 
         // Create the scene with the BorderPane as the root node
-        Scene gameOverScene = new Scene(root, 800, 600); // Adjust width and height as needed
+        Scene gameOverScene = new Scene(root, 800, 600);
 
         // Set the scene for the game over stage
        winStage.setScene(gameOverScene);
