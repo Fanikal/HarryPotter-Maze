@@ -4,7 +4,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
-import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -29,6 +28,12 @@ import java.util.Random;
 
 
 public class newMaze extends Application {
+
+    private String selectedHouse;
+
+    public newMaze(String selectedHouse) {
+        this.selectedHouse = selectedHouse;
+    }
 
     private static final int ROWS = 12;
     private static final int COLUMNS = 23;
@@ -80,12 +85,15 @@ public class newMaze extends Application {
     Random rand = new Random();
 
     // Background of the game
-    Image backgroundImage = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/sfondo.jpg"));
 
-    BackgroundImage backgroundImageObject = new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
-    Background background = new Background(backgroundImageObject);
+    Image generalbackground = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/sfondo.jpg"));
+    BackgroundImage backgroundImageObject = new BackgroundImage(generalbackground, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+    Background newBackground = new Background(backgroundImageObject);
+
+
 
     int numWand = 0;
+    private boolean collectedWand = false;
 
     private int[][] maze;
     private GridPane mazeGrid;
@@ -97,7 +105,6 @@ public class newMaze extends Application {
     private Rectangle targetYou;
     private Rectangle voldemort;
     private Rectangle targetVold;
-    private pauseScreen pauseScreen;
 
 
     int numPotionsCollected = 0;
@@ -105,20 +112,8 @@ public class newMaze extends Application {
     int numTimeCollected = 0;
     int numHearts = 3;
 
-   /* public boolean spacePressed = false;
-    public void setSpacePressed(boolean bool){
-        spacePressed = bool;
 
-    }
-
-    public boolean getSpacePressed(){
-        return spacePressed;
-
-    }*/
-
-
-
-    //TODO:  the game menu,change the background and the characters, add voldemort and the fight, add the door
+    //TODO:  manage the restart (time + player) , link of the items, only when collect the wand open the door and fight with voldemort, change backgrounds, win when you reach the end
     @Override
     public void start(Stage primaryStage) throws IOException {
 
@@ -133,6 +128,7 @@ public class newMaze extends Application {
         tvRow = 1;
         tvCol = 20;
 
+
         mazeGrid = new GridPane();
         legendItems = new GridPane(); //TODO: perchè non riesco a vedere gli oggetti collezionati dopo che ho messo la targa
         life = new GridPane();
@@ -141,6 +137,7 @@ public class newMaze extends Application {
         targetYou = drawTargetYou();
         voldemort = drawVoldemort(true);
         targetVold = drawTargetVol();
+
 
 
         moveVoldemort();
@@ -183,7 +180,7 @@ public class newMaze extends Application {
                             remainingSeconds = 59;
                         } else {
                             timeline.stop();
-                            gameOverWindow(true, primaryStage);
+                            gameOverWindow(true);
                         }
                     }
                     timerText.setText(getFormattedTime());
@@ -203,8 +200,7 @@ public class newMaze extends Application {
         grid.getChildren().add(0, finishView);
         grid.getChildren().add(0, life);
         grid.getChildren().add(0, timePane);
-
-        grid.setBackground(background);
+        grid.setBackground(newBackground);
         Scene scene = new Scene(grid, COLUMNS * CELL_SIZE, ROWS * CELL_SIZE);
         primaryStage.setTitle("Harry Potter's Maze");
 
@@ -214,7 +210,7 @@ public class newMaze extends Application {
             }
         };
 
-        //Controls the player movement event and control the pause menu //TODO: adjust the closing of the pause panel in pauseScreen
+        //Controls the player movement event and control the pause menu
         scene.setOnKeyPressed(event -> {
             movePlayer(event.getCode());
 
@@ -280,9 +276,9 @@ public class newMaze extends Application {
             for (int col = 0; col < COLUMNS; col++) {
                 Rectangle cell = new Rectangle(CELL_SIZE, CELL_SIZE);
 
-
                 if (maze[row][col] == 1) {
-                    cell.setFill(Color.BLACK); //Wall
+                    Color cellColor = getColorForHouse(selectedHouse);
+                    cell.setFill(cellColor); //Wall
                 } else if (maze[row][col] == 0){
                     cell.setFill(Color.TRANSPARENT); //Empty
                     positionateItems(cell, row, col);
@@ -384,6 +380,10 @@ public class newMaze extends Application {
             youCol = playerCol - 1;
             targetYou = drawTargetYou();
 
+            if(playerRow > 0 && playerRow < 3 && playerCol == 22){
+                winWindow();
+            }
+
         }
 
 
@@ -408,10 +408,11 @@ public class newMaze extends Application {
 
     private void moveVoldemort() {
 
-            KeyFrame keyFrame = new KeyFrame(Duration.seconds(8), event -> {
+            KeyFrame keyFrame = new KeyFrame(Duration.seconds(3), event -> {
                 int direction = calculateDirectionToPlayer();
                 int newRow = volRow;
                 int newCol = volCol;
+
 
                 switch (direction) {
                     case 0: // UP
@@ -437,6 +438,27 @@ public class newMaze extends Application {
                     tvRow = volRow;
                     tvCol = volCol + 1;
                     targetVold = drawTargetVol();
+
+                    int playerRow = GridPane.getRowIndex(player);
+                    int playerCol = GridPane.getColumnIndex(player);
+                    int voldRow = GridPane.getRowIndex(voldemort);
+                    int voldCol = GridPane.getColumnIndex(voldemort);
+
+
+                    if(playerRow == voldRow && playerCol == voldCol){
+
+                        numHearts--;
+
+                        System.out.println("Voldemort touched!");
+                        System.out.println( "VoldNumHearts : numHearts");
+                        updateLifeLegend(numHearts);
+
+                        if (numHearts == 0) {
+
+                            gameOverWindow(false);
+                        }
+                    }
+
                 }
 
             });
@@ -447,7 +469,6 @@ public class newMaze extends Application {
         voldemortTimeline.play();
 
     }
-
 
 
     private void positionateItems(Rectangle cell, int row, int col){
@@ -475,12 +496,10 @@ public class newMaze extends Application {
         }
 
         //randomly putting timeTurner but after a certain position in the maze
-        else if (num < 30 && num >= 25 && row > 0 && col > 9 && col < 12) {
+        else if (num < 30 && num >= 27 && row > 0 && row <= 5 && col < 20 && col > 12) {
             cell.setFill((new ImagePattern(timeTurner, 0, 0, 1, 1, true)));
 
         }
-
-
 
 
     }
@@ -495,18 +514,18 @@ public class newMaze extends Application {
         ribbonView.setTranslateY(10);
         legend.getChildren().addAll(ribbonView);
 
-
         Pane itemPane = new Pane();
-
 
         VBox.setMargin(legend, new Insets(5, 0, 0, 0));
 
         for (int col = 0; col < numHearts; col++) {
-            ImageView heartView = new ImageView(lifeHeart);
-            heartView.setFitHeight(30);
-            heartView.setFitWidth(30);
-            heartView.setLayoutX(col * 35); // Item in horizontal
-            itemPane.getChildren().add(heartView);
+
+                ImageView heartView = new ImageView(lifeHeart);
+                heartView.setFitHeight(30);
+                heartView.setFitWidth(30);
+                heartView.setLayoutX(col * 35); // Item in horizontal
+                itemPane.getChildren().add(heartView);
+
         }
 
         legend.getChildren().add(itemPane);
@@ -514,11 +533,41 @@ public class newMaze extends Application {
         life.getChildren().addAll(legend);
     }
 
+    private void updateLifeLegend(int numHearts) {
+        life.getChildren().clear(); // Rimuovi le vite precedenti
+
+        VBox legend = new VBox();
+
+        ImageView ribbonView = new ImageView(ribbonLife);
+        ribbonView.setFitHeight(100);
+        ribbonView.setFitWidth(100);
+        ribbonView.setTranslateY(10);
+        legend.getChildren().addAll(ribbonView);
+
+        Pane itemPane = new Pane();
+
+        VBox.setMargin(legend, new Insets(5, 0, 0, 0));
+
+        for (int col = 0; col < numHearts; col++) {
+            ImageView heartView = new ImageView(lifeHeart);
+            heartView.setFitHeight(30);
+            heartView.setFitWidth(30);
+            heartView.setLayoutX(col * 35);
+            itemPane.getChildren().add(heartView);
+        }
+
+        legend.getChildren().add(itemPane);
+        life.getChildren().addAll(legend);
+    }
+
+
 
     //Check collision between the player and the items
     private void checkCollision(Rectangle player) {
         int playerRow = GridPane.getRowIndex(player);
         int playerCol = GridPane.getColumnIndex(player);
+
+
 
         Rectangle cell = getNodeByRowColumnIndex(playerRow, playerCol, mazeGrid);
 
@@ -535,6 +584,7 @@ public class newMaze extends Application {
                         legendItems.add(potionView, col, 3);
                         makeDraggable(potionView);
                     }
+
                 }
                 else if(pattern.getImage().equals(timeTurner)){
                     cell.setFill(Color.TRANSPARENT);
@@ -551,15 +601,15 @@ public class newMaze extends Application {
                 }else if(pattern.getImage().equals(wand)) {
                     cell.setFill(Color.TRANSPARENT);
                     numWandCollected++;
-                    if(numWandCollected == 1){
+                    if (numWandCollected == 1) {
                         ImageView wandView = new ImageView(wand);
                         wandView.setFitHeight(30);
                         wandView.setFitWidth(30);
                         legendItems.add(wandView, 0, 1);
                         makeDraggable(wandView);
                     }
-
                 }
+
 
             }
         }
@@ -583,22 +633,31 @@ public class newMaze extends Application {
         node.setOnMouseReleased(e -> {
 
             node.setVisible(false);
-            Bounds itemBounds = node.getBoundsInLocal();
+            Image imageItem = node.getImage();
+            if(imageItem == potion && numHearts < 3){
+                    numHearts++;
+                    System.out.println( "PotionNumHearts : numHearts");
+                    updateLifeLegend(numHearts);
 
-            Bounds playerBounds = player.getBoundsInLocal();
-            /*player.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
-                //Coordinates of the mouse
-                double mouseX = event.getX();
-                double mouseY = event.getY();
 
-                /*if (itemBounds.intersects(playerBounds) && playerBounds.contains(e.getX(), e.getY()) && keyReleased == true){
-                    mineButton.setVisible(false);
-                    mineButtons.remove(mineButton);
-                    keyReleased = false;
-                    return;
+            }else if(imageItem == timeTurner){
+                if(remainingSeconds < 30)
+                    remainingSeconds = remainingSeconds + 30;
+                else{
+                    int remain = 0;
+                    remain = 60 - remainingSeconds;
+                    int last = 0;
+                    last = 30 - remain;
+                    remainingMinutes++;
+                    remainingSeconds = last;
+
                 }
 
-            });*/
+
+            }else if(imageItem == wand){
+                collectedWand = true;
+            }
+
 
 
 
@@ -654,7 +713,7 @@ public class newMaze extends Application {
 
 
     //Managing the game over menu
-    private void gameOverWindow(boolean timeIsUp, Stage primaryStage){
+    private void gameOverWindow(boolean timeIsUp){
 
         //open the gameOverScreen
         gameOverScreen GameOverScreen = new gameOverScreen(timeIsUp);
@@ -663,8 +722,21 @@ public class newMaze extends Application {
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
-        // Close the new maze screen
-        primaryStage.close();
+
+
+    }
+
+    //Managing the win menu
+    private void winWindow(){
+
+        //open the winScreen
+        winScreen winScreen = new winScreen();
+        try {
+            winScreen.start(new Stage());
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+
 
     }
 
@@ -674,7 +746,7 @@ public class newMaze extends Application {
    //managing the open of the door with the formula, when you're in front of the door and touch it with the mouse a window open to let you say the formula "Open the door"
     public void managingDoorOpen(Rectangle cell) throws IOException {
         cell.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
-            if (playerRow == 4 && playerCol == 11 && maze[4][12] == 3) {
+            if (playerRow == 4 && playerCol == 11 && maze[4][12] == 3 && collectedWand == true) {
 
                 try {
                     transcriberDemo = new TranscriberDemo();
@@ -697,7 +769,7 @@ public class newMaze extends Application {
                 Stage doorStage = new Stage();
                 Scene doorScene = new Scene(root, 500, 500);
                 doorStage.setTitle("OPEN THE DOOR");
-                root.setBackground(background);
+                root.setBackground(newBackground);
                 Text textLine1 = new Text("Click the vocal icon and say:");
                 Text textLine2 = new Text("'Open the door'");
                 textLine1.setTranslateY(-100);
@@ -739,14 +811,13 @@ public class newMaze extends Application {
     private void voldemortfight(Rectangle cell){
 
         cell.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            if(maze[4][12] == 0){
-
-
-
+            if(maze[4][12] == 0 && collectedWand == true){
                 if (drawingGame == null) {
                     drawingGame = new FreeformDrawingGame(this);
                     drawingGame.startDrawingGame();
                 }
+
+                collectedWand = false;
 
             }
 
@@ -764,6 +835,22 @@ public class newMaze extends Application {
 
     public void timeStop(){
         timeline.stop();
+    }
+
+    //Change color maze based on the house
+    private Color getColorForHouse(String house) {
+        if ("Gryffindor".equals(house)) {
+            Color gryff = Color.rgb(141, 19, 36);
+            return gryff;
+        } else if ("Slytherin".equals(house)) {
+            Color sylth = Color.rgb(32, 95, 70);
+            return sylth;
+        } else if ("Hufflepuff".equals(house)) {
+            Color huff = Color.rgb(224, 159, 45);
+            return huff;
+        } else {
+            return Color.BLACK;
+        }
     }
 
     public static void main(String[] args) {

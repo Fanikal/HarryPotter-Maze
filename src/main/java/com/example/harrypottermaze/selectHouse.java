@@ -25,6 +25,12 @@ public class selectHouse extends Application {
     private boolean isHighlighted = false;
     private String selectedHouse = "Gryffindor";
 
+    // ImageViews for the house images
+    ImageView gryffindorImageView = createHouseImageView("/com/example/harrypottermaze/Gryffindor.jfif", "Gryffindor");
+    ImageView slytherinImageView = createHouseImageView("/com/example/harrypottermaze/Slytherin.jfif", "Slytherin");
+    ImageView hufflepuffImageView = createHouseImageView("/com/example/harrypottermaze/Hufflepuff.jfif", "Hufflepuff");
+
+
     public static void main(String[] args) {
         // Launch of the application
         launch(args);
@@ -78,11 +84,6 @@ public class selectHouse extends Application {
         titleLabel.setFont(Font.font("Zapfino", 24 ));
         titlePane.getChildren().add(titleLabel);
 
-        // ImageViews for the house images
-        ImageView gryffindorImageView = createHouseImageView("/com/example/harrypottermaze/Gryffindor.jfif", "Gryffindor");
-        ImageView slytherinImageView = createHouseImageView("/com/example/harrypottermaze/Slytherin.jfif", "Slytherin");
-        ImageView hufflepuffImageView = createHouseImageView("/com/example/harrypottermaze/Hufflepuff.jfif", "Hufflepuff");
-
         // HBox to display the house images side by side
         HBox houseImagesBox = new HBox(20);
         houseImagesBox.setAlignment(Pos.CENTER);
@@ -103,7 +104,7 @@ public class selectHouse extends Application {
 
         // Handle button click event
         letsGoButton.setOnAction(e -> {
-                newMaze nMaze = new newMaze();
+                newMaze nMaze = new newMaze(selectedHouse);
                 try {
                     nMaze.start(new Stage());
                 } catch (Exception ex) {
