@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="237484c2-557a-4fee-970c-ea4088a99d9e" name="Changes" comment="Added Door open">
+    <list default="true" id="237484c2-557a-4fee-970c-ea4088a99d9e" name="Changes" comment="xml">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/harrypottermaze/FreeformDrawingGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/harrypottermaze/FreeformDrawingGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/harrypottermaze/newMaze.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/harrypottermaze/newMaze.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/harrypottermaze/newMaze$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/harrypottermaze/newMaze$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/harrypottermaze/newMaze.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/harrypottermaze/newMaze.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -140,7 +144,15 @@
       <option name="project" value="LOCAL" />
       <updated>1697032926456</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="xml">
+      <option name="closed" value="true" />
+      <created>1697360974499</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1697360974499</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -164,6 +176,7 @@
     <MESSAGE value="Added Images" />
     <MESSAGE value="Added unversioned items" />
     <MESSAGE value="Added Door open" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added Door open" />
+    <MESSAGE value="xml" />
+    <option name="LAST_COMMIT_MESSAGE" value="xml" />
   </component>
 </project>

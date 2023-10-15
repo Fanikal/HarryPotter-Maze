@@ -22,6 +22,7 @@ public class FreeformDrawingGame extends Application {
     private newMaze newMaze;
     private Timeline voldemortTimer;
 
+
     public FreeformDrawingGame(newMaze newMaze) {
         this.newMaze = newMaze;
     }
@@ -97,6 +98,7 @@ public class FreeformDrawingGame extends Application {
         Scene scene = new Scene(drawingPane, 800, 600);
         drawingStage.setScene(scene);
         drawingStage.show();
+
     }
 
     private Circle createPoint(double x, double y) {

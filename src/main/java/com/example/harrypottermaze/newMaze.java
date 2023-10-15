@@ -39,7 +39,7 @@ public class newMaze extends Application {
     private static final int COLUMNS = 23;
     private static final int CELL_SIZE = 45;
 
-    private static final int MINUTES = 3;
+    private static final int MINUTES = 1;
     private static final int SECONDS = 0;
 
     private FreeformDrawingGame drawingGame;
@@ -67,6 +67,8 @@ public class newMaze extends Application {
     private int remainingMinutes;
     private int remainingSeconds;
     private TranscriberDemo transcriberDemo;
+
+    private Boolean bool = false;
 
 
     Image lifeHeart = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/heart.png"));
@@ -207,8 +209,21 @@ public class newMaze extends Application {
         com.example.harrypottermaze.pauseScreen.PauseCallback pauseCallback = resumeClicked -> {
             if (resumeClicked) {
                 timeStart(); // Restart the timer
+                drawVoldemort(true);
+                voldemortTimeline.play();
             }
         };
+
+        com.example.harrypottermaze.pauseScreen.PauseCallback pauseCallback2 = exitClicked -> {
+            if (exitClicked) {
+                timeStop(); // Restart the timer
+                drawVoldemort(false);
+                voldemortTimeline.stop();
+
+
+            }
+        };
+
 
         //Controls the player movement event and control the pause menu
         scene.setOnKeyPressed(event -> {
@@ -216,6 +231,8 @@ public class newMaze extends Application {
 
             if (event.getCode() == KeyCode.SPACE) {
                 timeStop();
+                drawVoldemort(false);
+                voldemortTimeline.stop();
                 Stage pauseStage = new Stage();
                 pauseScreen pause = new pauseScreen(primaryStage, pauseCallback);
                 pause.start(pauseStage);
@@ -226,8 +243,8 @@ public class newMaze extends Application {
         });
 
         // We set the height of the stage
-        primaryStage.setHeight(800);
-        primaryStage.setWidth(800);
+        primaryStage.setHeight(3000);
+        primaryStage.setWidth(3000);
 
         mazeGrid.setAlignment(Pos.CENTER);
         mazeGrid.setTranslateY(-330);
@@ -380,6 +397,7 @@ public class newMaze extends Application {
             youCol = playerCol - 1;
             targetYou = drawTargetYou();
 
+
             if(playerRow > 0 && playerRow < 3 && playerCol == 22){
                 winWindow(primaryStage);
             }
@@ -408,7 +426,7 @@ public class newMaze extends Application {
 
     private void moveVoldemort(Stage primaryStage) {
 
-            KeyFrame keyFrame = new KeyFrame(Duration.seconds(3), event -> {
+            KeyFrame keyFrame = new KeyFrame(Duration.seconds(7), event -> {
                 int direction = calculateDirectionToPlayer();
                 int newRow = volRow;
                 int newCol = volCol;
@@ -729,12 +747,16 @@ public class newMaze extends Application {
     //Managing the win menu
     private void winWindow(Stage primaryStage){
 
-        //open the winScreen
-        winScreen winScreen = new winScreen(primaryStage, selectedHouse);
-        try {
-            winScreen.start(new Stage());
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+
+        if(bool == true) {
+
+            //open the winScreen
+            winScreen winScreen = new winScreen(primaryStage, selectedHouse);
+            try {
+                winScreen.start(new Stage());
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
         }
 
 
@@ -812,11 +834,14 @@ public class newMaze extends Application {
     //managing the voldemort fight, when you touch voldemort with the mouse you can fight drawing a circle, if voldemort touches you you lost hearts
     private void voldemortfight(Rectangle cell){
 
+
         cell.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             if(maze[4][12] == 0 && collectedWand == true){
                 if (drawingGame == null) {
                     drawingGame = new FreeformDrawingGame(this);
                     drawingGame.startDrawingGame();
+
+                    bool = true;
                 }
 
                 collectedWand = false;
@@ -827,8 +852,6 @@ public class newMaze extends Application {
         });
 
     }
-
-
 
 
     public void timeStart(){
