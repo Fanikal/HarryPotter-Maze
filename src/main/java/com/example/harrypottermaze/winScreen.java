@@ -16,13 +16,15 @@ import java.io.IOException;
 
 public class winScreen extends Application {
 
+    private WinCallback winCallback;
     private String msgToShow = "Mischief managed!";
     private String selectedHouse;
     private Stage gameStage;
 
-    public winScreen(Stage gameStage, String selectedHouse) {
+    public winScreen(WinCallback winCallback, Stage gameStage, String selectedHouse) {
         this.gameStage = gameStage;
         this.selectedHouse = selectedHouse;
+        this.winCallback = winCallback;
     }
 
     public static void main(String[] args) {
@@ -130,5 +132,9 @@ public class winScreen extends Application {
         gameOverScene.getStylesheets().add
                 (winScreen.class.getResource("mycss.css").toExternalForm());
 
+    }
+
+    public interface WinCallback {
+        void onRestartClicked(boolean restartClicked);
     }
 }

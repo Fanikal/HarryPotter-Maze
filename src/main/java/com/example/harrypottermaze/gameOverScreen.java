@@ -10,16 +10,20 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javax.security.auth.callback.Callback;
+
 
 import java.io.IOException;
 
 public class gameOverScreen extends Application {
 
+    private GameOverCallback gameOverCallback;
     private String msgToShow = "You didn't escape on time..!";
     private String selectedHouse;
     private Stage gameStage;
+    private boolean restartButtonClicked = false;
 
-    public gameOverScreen(boolean timeIsUp, Stage gameStage, String selectedHouse) {
+    public gameOverScreen(GameOverCallback gameOverCallback, boolean timeIsUp, Stage gameStage, String selectedHouse) {
 
         if (timeIsUp) {
             msgToShow = "You didn't escape on time..!";
@@ -29,6 +33,7 @@ public class gameOverScreen extends Application {
 
         this.gameStage = gameStage;
         this.selectedHouse = selectedHouse;
+        this.gameOverCallback = gameOverCallback;
     }
 
     public gameOverScreen() {
@@ -86,8 +91,10 @@ public class gameOverScreen extends Application {
         // action when clicking restart button
         restartButton.setOnAction(event -> {
             System.out.println("Restarting game");
+            gameOverCallback.onRestartClicked(true);
+            restartButtonClicked = true;
             gameStage.close();
-            newMaze newMazeGame = new newMaze(selectedHouse); // Create a new instance of the game, here the parameter should be the selectedHouse
+            newMaze newMazeGame = new newMaze(selectedHouse);
             try {
                 newMazeGame.start(new Stage()); // Start the new game
             } catch (IOException e) {
@@ -140,5 +147,9 @@ public class gameOverScreen extends Application {
         gameOverScene.getStylesheets().add
                 (gameOverScreen.class.getResource("mycss.css").toExternalForm());
 
+    }
+
+    public interface GameOverCallback {
+        void onRestartClicked(boolean restartClicked);
     }
 }

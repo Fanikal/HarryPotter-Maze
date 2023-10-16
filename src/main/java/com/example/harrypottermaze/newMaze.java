@@ -29,11 +29,24 @@ import java.util.Random;
 
 public class newMaze extends Application {
 
+    public enum GameState {
+        PLAYING, GAME_OVER, VICTORY
+    }
+
+    private gameOverScreen.GameOverCallback gameOverCallback;
+
+    private winScreen.WinCallback winCallback;
+
+    private GameState gameState;
+
     private String selectedHouse;
 
     public newMaze(String selectedHouse) {
+
         this.selectedHouse = selectedHouse;
+        this.gameState = GameState.PLAYING;
     }
+
 
     private static final int ROWS = 12;
     private static final int COLUMNS = 23;
@@ -113,6 +126,7 @@ public class newMaze extends Application {
     int numWandCollected = 0;
     int numTimeCollected = 0;
     int numHearts = 3;
+
 
 
     //TODO:  manage the restart (time + player) , link of the items, only when collect the wand open the door and fight with voldemort, change backgrounds, win when you reach the end
@@ -224,6 +238,26 @@ public class newMaze extends Application {
             }
         };
 
+        gameOverCallback = restartClicked -> {
+            if (restartClicked) {
+                timeStop(); // Restart the timer
+                drawVoldemort(false);
+                voldemortTimeline.stop();
+
+
+            }
+        };
+
+        winCallback = restartClicked -> {
+            if (restartClicked) {
+                timeStop(); // Restart the timer
+                drawVoldemort(false);
+                voldemortTimeline.stop();
+
+
+            }
+        };
+
 
         //Controls the player movement event and control the pause menu
         scene.setOnKeyPressed(event -> {
@@ -242,9 +276,11 @@ public class newMaze extends Application {
 
         });
 
+
+
         // We set the height of the stage
-        primaryStage.setHeight(3000);
-        primaryStage.setWidth(3000);
+        primaryStage.setHeight(800);
+        primaryStage.setWidth(800);
 
         mazeGrid.setAlignment(Pos.CENTER);
         mazeGrid.setTranslateY(-330);
@@ -734,7 +770,7 @@ public class newMaze extends Application {
     private void gameOverWindow(boolean timeIsUp, Stage primaryStage){
 
         //open the gameOverScreen
-        gameOverScreen GameOverScreen = new gameOverScreen(timeIsUp, primaryStage, selectedHouse);
+        gameOverScreen GameOverScreen = new gameOverScreen(gameOverCallback, timeIsUp, primaryStage, selectedHouse);
         try {
             GameOverScreen.start(new Stage());
         } catch (Exception ex) {
@@ -751,7 +787,7 @@ public class newMaze extends Application {
         if(bool == true) {
 
             //open the winScreen
-            winScreen winScreen = new winScreen(primaryStage, selectedHouse);
+            winScreen winScreen = new winScreen(winCallback, primaryStage, selectedHouse);
             try {
                 winScreen.start(new Stage());
             } catch (Exception ex) {
@@ -850,6 +886,8 @@ public class newMaze extends Application {
 
 
         });
+
+
 
     }
 
