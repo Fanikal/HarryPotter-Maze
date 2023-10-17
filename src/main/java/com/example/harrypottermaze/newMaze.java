@@ -55,7 +55,6 @@ public class newMaze extends Application {
     private static final int MINUTES = 1;
     private static final int SECONDS = 0;
 
-    private FreeformDrawingGame drawingGame;
 
 
     private int playerRow;
@@ -127,6 +126,8 @@ public class newMaze extends Application {
     int numTimeCollected = 0;
     int numHearts = 3;
 
+    private FreeformDrawingGame drawingGame;
+
 
 
     //TODO:  manage the restart (time + player) , link of the items, only when collect the wand open the door and fight with voldemort, change backgrounds, win when you reach the end
@@ -146,14 +147,13 @@ public class newMaze extends Application {
 
 
         mazeGrid = new GridPane();
-        legendItems = new GridPane(); //TODO: perchè non riesco a vedere gli oggetti collezionati dopo che ho messo la targa
+        legendItems = new GridPane();
         life = new GridPane();
         drawMaze();
         player = drawPlayer();
         targetYou = drawTargetYou();
         voldemort = drawVoldemort(true);
         targetVold = drawTargetVol();
-
 
 
         moveVoldemort(primaryStage);
@@ -279,8 +279,8 @@ public class newMaze extends Application {
 
 
         // We set the height of the stage
-        primaryStage.setHeight(800);
-        primaryStage.setWidth(800);
+        primaryStage.setHeight(3000);
+        primaryStage.setWidth(3000);
 
         mazeGrid.setAlignment(Pos.CENTER);
         mazeGrid.setTranslateY(-330);
