@@ -57,7 +57,6 @@ public class selectHouse extends Application {
         Image backgroundImage = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/sfondo.jpg"));
         BackgroundImage backgroundImageObject = new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
         Background background = new Background(backgroundImageObject);
-
         selectLocationRoot.setBackground(background);
 
         // VBox for the title
@@ -65,6 +64,7 @@ public class selectHouse extends Application {
         titlePane.setPadding(new Insets(10, 10, 10, 10));
         titlePane.setAlignment(Pos.CENTER);
 
+        // Crate label for selecting the house
         try {
             Font customFont = Font.loadFont(new FileInputStream("C:\\Users\\Fani\\AppData\\Local\\Microsoft\\Windows\\Fonts\\ZapfinoExtraLT-One.otf"), 25);
 
@@ -100,18 +100,20 @@ public class selectHouse extends Application {
         letsGoButton.setAlignment(Pos.CENTER);
         letsGoButton.getStyleClass().add("main-button");
 
+        // Adding letsGoButton to the buttonPane
         buttonPane.getChildren().add(letsGoButton);
 
         // Handle button click event
         letsGoButton.setOnAction(e -> {
-                newMaze nMaze = new newMaze(selectedHouse);
-                try {
-                    nMaze.start(new Stage());
-                } catch (Exception ex) {
-                    throw new RuntimeException(ex);
-                }
-                // Close the welcome screen
-                primaryStage.close();
+            newMaze nMaze = new newMaze(selectedHouse);
+            try {
+                // Open the game
+                nMaze.start(new Stage());
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+            // Close the welcome screen
+            primaryStage.close();
         });
 
         // Adding all elements to the root pane
@@ -134,6 +136,7 @@ public class selectHouse extends Application {
         }
     }
 
+    // method that handles the creation of the image view of each house
     private ImageView createHouseImageView(String imageUrl, String house) {
         ImageView imageView = new ImageView();
         imageView.setFitWidth(200);
@@ -169,6 +172,7 @@ public class selectHouse extends Application {
         return imageView;
     }
 
+    // applyHighlight to the selected house
     private void applyHighlight(ImageView imageView) {
         DropShadow dropShadow = new DropShadow();
         dropShadow.setColor(Color.BLACK);
@@ -177,6 +181,7 @@ public class selectHouse extends Application {
         imageView.setEffect(dropShadow);
     }
 
+    // remove highlight, if another house is selected or if image is re-clicked
     private void removeHighlight(ImageView imageView) {
         imageView.setEffect(null);
     }

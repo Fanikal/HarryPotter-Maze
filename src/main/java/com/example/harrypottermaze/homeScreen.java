@@ -41,8 +41,6 @@ public class homeScreen extends Application {
         homeRoot.setAlignment(Pos.CENTER);
         homeRoot.getStyleClass().add("homeRoot");
 
-
-
         // We set the height of the stage
         primaryStage.setHeight(800);
         primaryStage.setWidth(550);
@@ -50,7 +48,7 @@ public class homeScreen extends Application {
         // Creation of the scene that contains root as a root pane
         Scene scene = new Scene(homeRoot);
 
-        // Create a VBox to hold multiple Text nodes
+        // Create a VBox to hold the multiple Text nodes
         VBox textVBox = new VBox();
         textVBox.setPadding(new Insets(600, 10, 10, 10));
         textVBox.setAlignment(Pos.BOTTOM_CENTER);
@@ -58,36 +56,36 @@ public class homeScreen extends Application {
         // loading the record image
         Image recordIcon = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/record.png"));
 
-        // creating an ImageView for the icon
+        // creating an imageView for the record icon
         ImageView iconView = new ImageView(recordIcon);
         iconView.setFitHeight(50);
         iconView.setPreserveRatio(true);
 
-        // Create Text nodes for each line of text
+        // Create text nodes for each line of text
         Text line1 = new Text("Say");
         Text line2 = new Text("´I solemnly swear that I'm up to no good´");
         Text line3 = new Text("to open the game");
 
-        // Apply styling to the Text nodes
+        // Applying styling to the text nodes
         line1.setFont(Font.font("Times New Roman", FontWeight.BOLD, 24));
         line2.setFont(Font.font("Times New Roman", FontWeight.BOLD, 24));
         line3.setFont(Font.font("Times New Roman", FontWeight.BOLD, 24));
 
-        // Apply glow effect to the Text nodes
+        // Applying glow effect to the text nodes
         final Effect glow = new Glow(1.0);
         line1.setEffect(glow);
         line2.setEffect(glow);
         line3.setEffect(glow);
 
-        // Set text fill color
+        // Setting the text fill color
         line1.setFill(Color.BLACK);
         line2.setFill(Color.BLACK);
         line3.setFill(Color.BLACK);
 
-        // Add Text nodes to the VBox
+        // Adding the text nodes to the VBox
         textVBox.getChildren().addAll(line1, line2, line3, iconView);
 
-        // Add the VBox to the root pane
+        // Adding the VBox to the root pane
         homeRoot.getChildren().add(textVBox);
 
         // handling the record icon event
@@ -97,10 +95,12 @@ public class homeScreen extends Application {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+            // boolean variable to store if the voice recognition was successful
             boolean magicPhraseRecognized = TranscriberDemoHome.recognizeOpenMap();
             if (magicPhraseRecognized) {
-                // Open the selectCharacter screen
+                // Close the current screen
                 primaryStage.close();
+                // Open the selectCharacter screen
                 openSelectCharacterScreen();
             } else {
                 // showing a message that the game cannot be opened
@@ -132,5 +132,3 @@ public class homeScreen extends Application {
         }
     }
 }
-
-

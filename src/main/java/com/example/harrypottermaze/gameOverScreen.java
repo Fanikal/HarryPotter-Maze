@@ -18,22 +18,26 @@ import java.io.IOException;
 public class gameOverScreen extends Application {
 
     private GameOverCallback gameOverCallback;
+    private GameOverExitCallback gameOverExitCallback;
     private String msgToShow = "You didn't escape on time..!";
     private String selectedHouse;
     private Stage gameStage;
     private boolean restartButtonClicked = false;
 
-    public gameOverScreen(GameOverCallback gameOverCallback, boolean timeIsUp, Stage gameStage, String selectedHouse) {
+    public gameOverScreen(GameOverCallback gameOverCallback, GameOverExitCallback gameOverExitCallback, boolean timeIsUp, Stage gameStage, String selectedHouse) {
 
         if (timeIsUp) {
+            //message in case the user lost because of time over
             msgToShow = "You didn't escape on time..!";
         } else {
+            //message in case the user lost because of Voldemort (0 lives)
             msgToShow = "The Marauder's map mischief failed..!";
         }
 
         this.gameStage = gameStage;
         this.selectedHouse = selectedHouse;
         this.gameOverCallback = gameOverCallback;
+        this.gameOverExitCallback = gameOverExitCallback;
     }
 
     public gameOverScreen() {
@@ -57,7 +61,6 @@ public class gameOverScreen extends Application {
         Image backgroundImage = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/sfondo.jpg"));
         BackgroundImage backgroundImageObject = new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
         Background background = new Background(backgroundImageObject);
-
         root.setBackground(background);
 
         // Load the "ribbon 3" image from resources
@@ -93,7 +96,9 @@ public class gameOverScreen extends Application {
             System.out.println("Restarting game");
             gameOverCallback.onRestartClicked(true);
             restartButtonClicked = true;
+            //close the gameStage
             gameStage.close();
+            //re-initiliaze game
             newMaze newMazeGame = new newMaze(selectedHouse);
             try {
                 newMazeGame.start(new Stage()); // Start the new game
@@ -108,12 +113,13 @@ public class gameOverScreen extends Application {
         // Create the "Exit" button
         Button exitButton = new Button("Exit");
         exitButton.setOnAction(event -> {
-            // Go back to the home page
-            gameOverStage.close(); // Close the win screen
-            gameStage.close();
+            gameOverExitCallback.onExitClicked(true);
+            newMaze newMazeGame = new newMaze(selectedHouse); //re-initiliaze game
+            gameOverStage.close(); // Close the game over screen
+            gameStage.close(); // close the gameStage
             homeScreen hScreen = new homeScreen();
             try {
-                hScreen.start(new Stage());
+                hScreen.start(new Stage()); // Go back to the home page
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -152,4 +158,11 @@ public class gameOverScreen extends Application {
     public interface GameOverCallback {
         void onRestartClicked(boolean restartClicked);
     }
+
+    public interface GameOverExitCallback {
+        void onExitClicked(boolean exitClicked);
+
+    }
+
+
 }

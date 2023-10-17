@@ -23,6 +23,7 @@ public class pauseScreen extends Application {
     private Stage gameStage; // Reference to the main game stage
     private boolean resumeButtonClicked = false;
 
+    // constructor
     public pauseScreen(Stage gameStage, PauseCallback callback) {
         this.gameStage = gameStage;
         this.callback = callback;
@@ -53,9 +54,9 @@ public class pauseScreen extends Application {
 
         // Create an ImageView to display the image with a specified width and height
         ImageView pauseImageView = new ImageView(pauseImage);
-        pauseImageView.setFitWidth(800); // Set a larger width 800
-        pauseImageView.setFitHeight(400); // Set a larger height 400
-        pauseImageView.setPreserveRatio(true); // Preserve image aspect ratio
+        pauseImageView.setFitWidth(800);
+        pauseImageView.setFitHeight(400);
+        pauseImageView.setPreserveRatio(true);
         pauseImageView.setTranslateY(-30);
         root.setAlignment(pauseImageView, Pos.CENTER);
 
@@ -74,7 +75,7 @@ public class pauseScreen extends Application {
         buttonBox.setAlignment(Pos.CENTER);
         buttonBox.setPadding(new Insets(0, 0, 0, 0));
 
-        // Create the "Restart" button
+        // Create the "Resume" button
         Button resumeButton = new Button("Resume");
         resumeButton.getStyleClass().add("main-button");
 
@@ -92,10 +93,9 @@ public class pauseScreen extends Application {
 
         // handle the click of the exit button
         exitButton.setOnAction(event -> {
-            // Go back to the home page
             pauseStage.close(); // Close the pause screen
             gameStage.close();
-            homeScreen hScreen = new homeScreen();
+            homeScreen hScreen = new homeScreen(); // Go back to the home page
             try {
                 hScreen.start(new Stage());
             } catch (IOException e) {
@@ -116,8 +116,12 @@ public class pauseScreen extends Application {
         // Set the button box at the center of the BorderPane
         root.setBottom(buttonBox);
 
+        // Create the scene with the BorderPane as the root node
         Scene pauseScene = new Scene(root, 500, 500);
+
+        // Set the scene for the game over stage
         pauseStage.setScene(pauseScene);
+
         pauseStage.setTitle("PAUSE");
         pauseStage.show();
 
@@ -125,7 +129,7 @@ public class pauseScreen extends Application {
         pauseScene.getStylesheets().add
                 (gameOverScreen.class.getResource("mycss.css").toExternalForm());
 
-        // Handle the space bar event to resume the game
+        // Handle the space bar event to resume the game // unused
         pauseScene.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.SPACE) {
                 gameStage.show(); // Show the game stage

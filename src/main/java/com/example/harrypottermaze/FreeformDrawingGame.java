@@ -34,6 +34,7 @@ public class FreeformDrawingGame extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Connect Points Game");
 
+        // Pane that will hold the content
         drawingPane = new Pane();
 
         // Create three points (A, B, and C) as circles on the canvas
@@ -52,6 +53,7 @@ public class FreeformDrawingGame extends Application {
         drawingPane.setOnMouseDragged(this::handleMouseDragged);
         drawingPane.setOnMouseReleased(this::handleMouseReleased);
 
+        // Create the scene with the Pane as the root
         Scene scene = new Scene(drawingPane, 800, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -95,6 +97,7 @@ public class FreeformDrawingGame extends Application {
         voldemortTimer.setCycleCount(1);
         voldemortTimer.play();
 
+        // Create the scene with the Pane as the root
         Scene scene = new Scene(drawingPane, 800, 600);
         drawingStage.setScene(scene);
         drawingStage.show();
@@ -142,9 +145,11 @@ public class FreeformDrawingGame extends Application {
 
             // Check if the user has connected all points
             if (connectedPoints == 3) {
+                //user has connected all points, circle turns green
                 System.out.println("Success in drawing");
                 currentPath.setStroke(Color.GREEN);
             } else {
+                //user hasn't connected all points, drawing turns red
                 currentPath.setStroke(Color.RED);
             }
 

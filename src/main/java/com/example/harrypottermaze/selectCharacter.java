@@ -49,20 +49,20 @@ public class selectCharacter extends Application {
         Image backgroundImage = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/sfondo.jpg"));
         BackgroundImage backgroundImageObject = new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
         Background background = new Background(backgroundImageObject);
-
         selectCharRoot.setBackground(background);
 
         // Creation of the scene that contains root as a root pane
         Scene scene = new Scene(selectCharRoot);
 
-        // Initialize characters
+        // Initializing the characters
         characters.add(new Character("Harry Potter", "/com/example/harrypottermaze/harry-potter.png"));
         characters.add(new Character("Ron Weasley", "/com/example/harrypottermaze/ron-weasley.png"));
         characters.add(new Character("Hermione Granger", "/com/example/harrypottermaze/hermione-granger.png"));
 
-        // Set up the initial character image
+        // Setting up the initial character image
         displayCharacter(currentCharacterIndex);
 
+        // handling the swipe between the character images
         characterImageView.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
             initialX = event.getSceneX();
             event.consume();
@@ -88,7 +88,7 @@ public class selectCharacter extends Application {
         titlePane.setPadding(new Insets(0, 0, 0, 0));
         titlePane.setAlignment(Pos.CENTER);
 
-         // VBox for the title "Select character"
+        // VBox for the title "Select character"
         Label titleLabel = new Label("Swipe to select character");
         titleLabel.setFont(Font.font("Zapfino", 22));
         titleLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #302c2c;");
@@ -103,9 +103,11 @@ public class selectCharacter extends Application {
         letsstartButton.setFont(Font.font("Zapfino"));
         letsstartButton.getStyleClass().add("main-button");
 
+        // handling the event of the Let's go button
         letsstartButton.setOnAction(event -> {
             selectHouse sHouse = new selectHouse();
             try {
+                // Open selectHouse screen
                 sHouse.start(new Stage());
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
@@ -114,13 +116,15 @@ public class selectCharacter extends Application {
             primaryStage.close();
         });
 
+        // Add Let's go button to the VBOx
         labelAndButtonBox.getChildren().addAll(letsstartButton);
 
         // VBox that contains the character image and the label/button VBox
-        VBox characterBox = new VBox(0); // 20 pixels spacing
+        VBox characterBox = new VBox(0);
         characterBox.setAlignment(Pos.CENTER);
         characterBox.getChildren().addAll(characterImageView, labelAndButtonBox);
 
+        // Add titlePane and characterBox to the selectCharRoot
         selectCharRoot.getChildren().addAll(titlePane, characterBox);
 
         // We display the scene we just created in the stage
@@ -140,6 +144,7 @@ public class selectCharacter extends Application {
         }
     }
 
+    // method that handles the display of each character imageView
     private void displayCharacter(int characterIndex) {
         if (characterIndex >= 0 && characterIndex < characters.size()) {
             Character character = characters.get(characterIndex);

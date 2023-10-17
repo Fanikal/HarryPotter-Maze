@@ -17,14 +17,16 @@ import java.io.IOException;
 public class winScreen extends Application {
 
     private WinCallback winCallback;
+    private WinExitCallback winExitCallback;
     private String msgToShow = "Mischief managed!";
     private String selectedHouse;
     private Stage gameStage;
 
-    public winScreen(WinCallback winCallback, Stage gameStage, String selectedHouse) {
+    public winScreen(WinCallback winCallback, WinExitCallback winExitCallback, Stage gameStage, String selectedHouse) {
         this.gameStage = gameStage;
         this.selectedHouse = selectedHouse;
         this.winCallback = winCallback;
+        this.winExitCallback = winExitCallback;
     }
 
     public static void main(String[] args) {
@@ -44,7 +46,6 @@ public class winScreen extends Application {
         Image backgroundImage = new Image(getClass().getResourceAsStream("/com/example/harrypottermaze/sfondo.jpg"));
         BackgroundImage backgroundImageObject = new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
         Background background = new Background(backgroundImageObject);
-
         root.setBackground(background);
 
         // Load the "ribbon 3" image from resources
@@ -52,12 +53,12 @@ public class winScreen extends Application {
 
         // ImageView to display the image with a specified width and height
         ImageView winImageView = new ImageView(winImage);
-        winImageView.setFitWidth(800); // Set a larger width
-        winImageView.setFitHeight(400); // Set a larger height
-        winImageView.setPreserveRatio(true); // Preserve image aspect ratio
+        winImageView.setFitWidth(800);
+        winImageView.setFitHeight(400);
+        winImageView.setPreserveRatio(true);
         root.setAlignment(winImageView, Pos.CENTER);
 
-        // Text node for the message ("Time is up" or "Lives are up")
+        // Text node for the message
         Text messageText = new Text(msgToShow);
         messageText.setFont(Font.font("Zampfino", 20));
         messageText.setTranslateY(-180);
@@ -79,8 +80,8 @@ public class winScreen extends Application {
         // handle the events of restart button
         restartButton.setOnAction(event -> {
             System.out.println("Restarting game");
-            gameStage.close();
-            newMaze newMazeGame = new newMaze(selectedHouse);; // Create a new instance of the game
+            gameStage.close(); // close the gameStage
+            newMaze newMazeGame = new newMaze(selectedHouse); // Create a new instance of the game
             try {
                 newMazeGame.start(new Stage()); // Start the new game
             } catch (IOException e) {
@@ -95,10 +96,11 @@ public class winScreen extends Application {
 
         // handle the event of exit button
         exitButton.setOnAction(event -> {
-            // Go back to the home page
+            winExitCallback.onExitClicked(true);
+            newMaze newMazeGame = new newMaze(selectedHouse); // Create a new instance of the game
             winStage.close(); // Close the win screen
-            gameStage.close();
-            homeScreen hScreen = new homeScreen();
+            gameStage.close(); // Close the game screen
+            homeScreen hScreen = new homeScreen(); // Go back to the home page
             try {
                 hScreen.start(new Stage());
             } catch (IOException e) {
@@ -123,7 +125,7 @@ public class winScreen extends Application {
         Scene gameOverScene = new Scene(root, 800, 600);
 
         // Set the scene for the game over stage
-       winStage.setScene(gameOverScene);
+        winStage.setScene(gameOverScene);
 
         // Show the game over stage
         winStage.show();
@@ -136,5 +138,9 @@ public class winScreen extends Application {
 
     public interface WinCallback {
         void onRestartClicked(boolean restartClicked);
+    }
+
+    public interface WinExitCallback {
+        void onExitClicked(boolean exitClicked);
     }
 }
