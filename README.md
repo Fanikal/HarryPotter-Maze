@@ -7,8 +7,6 @@ This project is an interactive maze game created as part of the "Programming of 
 2. [Running the Application](#running-the-application)
 3. [Application Overview](#application-overview)
 4. [Functionality Highlights](#functionality-highlights)
-5. [Additional Information](#additional-information)
-6. [UI Design and Color Palette](#ui-design-and-color-palette)
 
 ## Installation and Setup
 Before running the Maze Game, please follow these initial setup steps:
