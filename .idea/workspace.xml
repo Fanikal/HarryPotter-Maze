@@ -6,10 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="237484c2-557a-4fee-970c-ea4088a99d9e" name="Changes" comment="xml">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/harrypottermaze/MazeDisplayer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/harrypottermaze/newMaze.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/harrypottermaze/newMaze.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/harrypottermaze/FreeformDrawingGame.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/harrypottermaze/newMaze.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/harrypottermaze/newMaze.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,7 +61,7 @@
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Fani/IdeaProjects/demo&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Fani/IdeaProjects/HarryPotter/HarryPotterMaze&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -104,6 +100,8 @@
       <workItem from="1697121714208" duration="18486000" />
       <workItem from="1697276694102" duration="12748000" />
       <workItem from="1697446724734" duration="1025000" />
+      <workItem from="1697621929163" duration="1222000" />
+      <workItem from="1697631312899" duration="3903000" />
     </task>
     <task id="LOCAL-00001" summary="Added the maze with character movement and items">
       <option name="closed" value="true" />
