@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-# HarryPotterMaze
-=======
 # HarryPotter-Maze README
 
 This project is an interactive maze game created as part of the "Programming of Interactive System" course of the Université Paris-Saclay. It's Harry-Potter themed and it was developed with IntelliJ IDEA 2023.2.1.
@@ -54,4 +51,3 @@ The Maze Game boasts a range of functionalities to enhance the gaming experience
 - **Pause and Resume:** You can pause the game at any time by pressing the SPACE button on your keyboard. Access the pause menu to resume your adventure or exit the game.
 
 The Maze Game offers a dynamic and immersive experience through voice recognition, swipe interactions, key presses, and drag-and-drop actions. 
->>>>>>> origin/main
